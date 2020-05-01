@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    hostname: web
+    container_name: hvz_web
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend/:/www/
+    ports:
+      - 80:80
+      - 443:443
+
+  flask:
+    build: ./config/flask
+    hostname: flask
+    container_name: hvz_flask
+    volumes:
+      - ./backend/:/code/
+    environment:
+      FLASK_ENV: development
+
+  database:
+    image: postgres:latest
+    hostname: database
+    container_name: hvz_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: test
