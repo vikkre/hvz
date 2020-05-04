@@ -2,8 +2,9 @@ version: '3'
 services:
   web:
     image: nginx:latest
-    hostname: web
     container_name: hvz_web
+    depends_on:
+      - flask
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./frontend/:/www/
@@ -13,16 +14,17 @@ services:
 
   flask:
     build: ./config/flask
-    hostname: flask
     container_name: hvz_flask
+    depends_on:
+      - database
     volumes:
       - ./backend/:/code/
     environment:
       FLASK_ENV: development
+      TEST: test
 
   database:
     image: postgres:latest
-    hostname: database
     container_name: hvz_db
     environment:
       POSTGRES_USER: admin
