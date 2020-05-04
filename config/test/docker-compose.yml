@@ -1,0 +1,19 @@
+version: '3'
+services:
+  database:
+    image: postgres:latest
+    container_name: hvz_test_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: test
+
+  test_flask:
+    build: ./test_flask
+    container_name: hvz_test_flask
+    depends_on:
+      - database
+    volumes:
+      - ../../backend/:/code/
+    environment:
+      FLASK_ENV: development
