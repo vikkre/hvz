@@ -43,7 +43,7 @@ def products():
             except Exception as e :
                 db.session.rollback()
                 pr.status = 'failed' 
-                pr.error = "product_alredy_exits"
+                pr.error = str(e)
         return jsonify([p.to_dict() for p in products])
     else:
         return jsonify([p.to_dict() for p in Product.query.all()])
