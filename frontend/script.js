@@ -29,6 +29,19 @@ submit.addEventListener("click", (e) => {
     .catch((reason) => console.log(reason));
 });
 
+product_list.addEventListener("click", (e) => {
+  errors.innerText = "";
+  if (e.target.tagName === "A") {
+    const product = e
+      .composedPath()
+      .find((item) => item.dataset && item.dataset["product_id"]);
+    if (product) {
+      const product_id = product.dataset["product_id"];
+      errors.innerText = `I would like to ${e.target.name} the product with id = ${product_id}`;
+    }
+  }
+});
+
 function loadData() {
   fetch("http://localhost/api/products")
     .then((ret) => ret.json())
@@ -51,4 +64,5 @@ function loadData() {
       table.appendChild(product_list);
     });
 }
+
 loadData();

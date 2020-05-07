@@ -5,6 +5,10 @@
       #errors {
         color: red;
       }
+
+      .item_edit {
+        cursor: pointer;
+      }
     </style>
     <link rel="icon" href="https://via.placeholder.com/70x70" />
     <meta charset="UTF-8" />
@@ -20,8 +24,8 @@
         <td>Cell A1</td>
         <td>Cell B1</td>
         <td>
-          <a herf="#">edit</a>
-          <a herf="#">delete</a>
+          <a class="item_edit" name="edit_product">edit</a>
+          <a class="item_edit" name="delete_product">delete</a>
         </td>
       </tr>
     </template>
@@ -54,11 +58,11 @@
           id="bestand"
           name="bestand"
           size="20"
-          placeholder="Bestand" value="0"
+          placeholder="Bestand"
+          value="0"
         />
         <button type="submit" id="submit">Submit</button>
-      <div id="errors">
-      </div>
+        <div id="errors"></div>
       </form>
     </article>
   </body>
