@@ -3,12 +3,14 @@ const product_list = document.getElementById("product_list");
 const submit = document.getElementById("submit");
 const artikel = document.getElementById("artikel");
 const bestand = document.getElementById("bestand");
+const errors = document.getElementById("errors");
 
 submit.addEventListener("click", (e) => {
   e.preventDefault();
   data = JSON.stringify([{ name: artikel.value, amount: bestand.value }]);
-  artikel.value = null
-  bestand.value = null
+  artikel.value = null;
+  bestand.value = null;
+  errors.innerText = "";
   fetch("http://localhost/api/products", {
     method: "POST",
     headers: {
@@ -19,6 +21,9 @@ submit.addEventListener("click", (e) => {
     .then((result) => result.json())
     .then((data) => {
       console.log(data);
+      if (data[0].status !== "ok") {
+        errors.innerText = data[0].error;
+      }
       loadData();
     })
     .catch((reason) => console.log(reason));
@@ -36,7 +41,7 @@ function loadData() {
       data.forEach((prod) => {
         new_row = row_template.content.cloneNode((deep = true)).children[0];
         new_row.id = `product_${prod.id}`;
-        new_row.dataset["product_id"] = prod.id
+        new_row.dataset["product_id"] = prod.id;
         cells = new_row.querySelectorAll("td");
         cells[0].innerText = prod.name;
         cells[1].innerText = prod.amount;
