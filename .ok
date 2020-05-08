@@ -1,0 +1,5 @@
+.venv\scripts\activate
+docker-compose up --build
+docker exec -it hvz_db psql test admin
+docker exec -it hvz_flask sh
+pushd config/test; docker-compose up --build

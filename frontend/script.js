@@ -43,7 +43,8 @@ product_list.addEventListener("click", (e) => {
 });
 
 function loadData() {
-  fetch("http://localhost/api/products")
+  // fetch("http://localhost/api/products")
+  fetch("api/products")
     .then((ret) => ret.json())
     .then((data) => {
       table = product_list.parentElement;
