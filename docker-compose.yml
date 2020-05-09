@@ -19,6 +19,8 @@ services:
       - database
     volumes:
       - ./api/:/code/
+    environment:
+      DATABASE: hvz_production
 
   database:
     image: postgres:latest
@@ -26,4 +28,4 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: test
+      POSTGRES_DB: hvz_production
