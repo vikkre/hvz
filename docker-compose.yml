@@ -4,7 +4,7 @@ services:
     image: nginx:latest
     container_name: hvz_web
     depends_on:
-      - flask
+      - api
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./frontend/:/www/
@@ -12,16 +12,13 @@ services:
       - 80:80
       - 443:443
 
-  flask:
-    build: ./config/flask
-    container_name: hvz_flask
+  api:
+    build: ./config/api
+    container_name: hvz_api
     depends_on:
       - database
     volumes:
-      - ./backend/:/code/
-    environment:
-      FLASK_ENV: development
-      TEST: test
+      - ./api/:/code/
 
   database:
     image: postgres:latest
