@@ -36,7 +36,7 @@ def products():
         for jp in request.json:
             pr = ProductResult(Product.from_dict(jp))
             products.append(pr)
-            db.session.add(pr.product)
+            db.session.merge(pr.product)
             try:
                 db.session.commit()
                 pr.status = 'ok'

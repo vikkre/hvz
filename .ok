@@ -1,4 +1,5 @@
 .venv\scripts\activate
+start powershell
 docker-compose up --build
 docker exec -it hvz_db psql test admin
 docker exec -it hvz_flask sh
