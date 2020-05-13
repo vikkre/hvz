@@ -1,6 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import OperationalError
 import os
+import time
+
+
+DB_CONNECTION_RETRY_WAIT_SECONDS = 5
 
 
 app = Flask(__name__)
@@ -13,8 +18,15 @@ db = SQLAlchemy(app)
 
 import products
 
-db.create_all()
+try_connect = True
+while try_connect:
+    try:
+        db.create_all()
+        try_connect = False
+    except OperationalError:
+        print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds", flush=True)
+        time.sleep(DB_CONNECTION_RETRY_WAIT_SECONDS)
 
 @app.route('/')
 def index():
-    return "Hello World\n"
+    return "Hello World!\n"
