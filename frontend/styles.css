@@ -1,7 +1,3 @@
-#errors {
-  color: red;
-}
-
 .product_action_link {
   cursor: pointer;
 }
@@ -10,25 +6,28 @@ tfoot {
   background-color: var(--color-bg-secondary);
 }
 
+.snackContainer {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  display: grid;
+  grid-template-areas: "snackbar" "snackbar" "snackbar";
+  border: solid 10px black;
+}
 /* This is from w3c scools ¯\_(ツ)_/¯¯\_(ツ)_/¯
 /* The snackbar - position it at the bottom and in the middle of the screen */
-#snackbar {
-  visibility: hidden; /* Hidden by default. Visible on click */
+.snackBar {
   min-width: 250px; 
-  margin-left: -125px; 
   background-color: var(--color-secondary);
   color: var(--color-text-secondary);
   text-align: center; 
   border-radius: var(--border-radius)  var(--border-radius)  0 0;
   padding: 16px; 
-  position: fixed; /* Sit on top of the screen */
-  z-index: 1; /* Add a z-index if needed */
-  left: 50%; /* Center the snackbar */
-  bottom: 30px; /* 30px from the bottom */
+  margin-bottom: 16px;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
-#snackbar.show {
+.snackBar.show {
   visibility: visible; /* Show the snackbar */
   /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
   However, delay the fade out process for 2.5 seconds */
@@ -56,3 +55,4 @@ tfoot {
     opacity: 0;
   }
 }
+

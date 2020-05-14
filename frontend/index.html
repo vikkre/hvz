@@ -5,9 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./mvp.css" />
-    <style>
-    </style>
-    <link rel="stylesheet" href="styles.css">
+    <style></style>
+    <link rel="stylesheet" href="styles.css" />
     <title>HVZ - Bestandsliste</title>
   </head>
 
@@ -16,7 +15,7 @@
     <template id="row_template">
       <tr id="0" data-product_id="0">
         <td><input type="text" /></td>
-        <td><input type="number" value="0"/></td>
+        <td><input type="number" value="0" /></td>
         <td>
           <a class="product_action_link" name="product_save">save</a>
           <a class="product_action_link" name="product_delete">delete</a>
@@ -34,9 +33,10 @@
         </thead>
         <tbody id="product_list"></tbody>
         <tfoot>
-          <tr><td colspan="3">Add a new Product</td></tr>
+          <tr>
+            <td colspan="3">Add a new Product</td>
+          </tr>
           <tr id="0" data-product_id="0">
-
             <td><input id="new_product_artikel" type="text" /></td>
             <td><input id="new_product_bestand" type="number" value="0" /></td>
             <td>
@@ -46,9 +46,14 @@
         </tfoot>
       </table>
     </article>
-    <div id="error"></div>
-    <div id="snackbar">Some text some message..</div>
-
+    <div id="snackContainer" class="snackContainer">
+      <div class="snackBar show">in container</div>
+      <div class="snackBar show">in container</div>
+      <div class="snackBar show">in container</div>
+    </div>
+    <template id="snackBar">
+      <div class="snackBar">Some text some message..</div>
+    </template>
   </body>
   <script src="script.js"></script>
 </html>

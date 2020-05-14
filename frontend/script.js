@@ -9,6 +9,8 @@ const new_product_bestand = document.getElementById("new_product_bestand");
 const api_root = "http://localhost:5000";
 
 function showSnack(text) {
+  newSnackbar = snackbar.content.cloneNode((deep = true)).children[0];
+
   snackbar.innerText = text;
   snackbar.classList.toggle("show");
   setTimeout(() => {
