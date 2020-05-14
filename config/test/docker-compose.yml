@@ -6,14 +6,15 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: test
+      POSTGRES_DB: hvz_test
 
-  test_flask:
-    build: ./test_flask
-    container_name: hvz_test_flask
+  test_api:
+    build: ./test_api
+    container_name: hvz_test_api
     depends_on:
       - database
     volumes:
-      - ../../backend/:/code/
+      - ../../api/:/code/
     environment:
       FLASK_ENV: development
+      DATABASE: hvz_test

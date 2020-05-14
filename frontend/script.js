@@ -1,6 +1,5 @@
 const row_template = document.getElementById("row_template");
 const product_list = document.getElementById("product_list");
-const snackbar = document.getElementById("snackbar");
 const product_add = document.getElementById("product_add");
 const new_product_artikel = document.getElementById("new_product_artikel");
 const new_product_bestand = document.getElementById("new_product_bestand");
@@ -8,14 +7,16 @@ const new_product_bestand = document.getElementById("new_product_bestand");
 // const api_root = "http://localhost/api";
 const api_root = "http://localhost:5000";
 
-function showSnack(text) {
-  newSnackbar = snackbar.content.cloneNode((deep = true)).children[0];
-
-  snackbar.innerText = text;
-  snackbar.classList.toggle("show");
-  setTimeout(() => {
-    snackbar.classList.toggle("show");
-  }, 3000);
+function showSnack(text, color = "var(--color") {
+  Toastify({
+    text: text,
+    duration: 3000,
+    close: true,
+    gravity: "bottom", // `top` or `bottom`
+    position: "right", // `left`, `center` or `right`
+    backgroundColor: color,
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+  }).showToast();
 }
 
 product_add.addEventListener("click", (e) => {
@@ -24,21 +25,22 @@ product_add.addEventListener("click", (e) => {
     new_product_artikel.value.length < 3 ||
     !Number.isInteger(new_product_bestand.valueAsNumber)
   ) {
-    showSnack("Enter a valid product");
+    showSnack("Enter a valid product", "darkblue");
     return;
   }
-  data = JSON.stringify([
+  data = [
     {
       name: new_product_artikel.value,
       amount: new_product_bestand.valueAsNumber,
     },
-  ]);
+  ];
+  dataJSON = JSON.stringify(data);
   new_product_artikel.value = "";
   new_product_bestand.value = 0;
   fetch(`${api_root}/products`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: data,
+    body: dataJSON,
   })
     .then((result) => result.json())
     .then((data) => {
@@ -46,9 +48,10 @@ product_add.addEventListener("click", (e) => {
       if (data[0].status !== "ok") {
         showSnack(data[0].error);
       }
+      showSnack(`Product "${data[0].product.name}" added.`);
       loadData();
     })
-    .catch((reason) => console.log(reason));
+    .catch((reason) => showSnack(reason.message, "red"));
 });
 
 product_list.addEventListener("click", (e) => {
@@ -85,6 +88,9 @@ function loadData() {
 
       table.appendChild(product_list);
       showSnack(`Loaded ${data.length} products`);
+    })
+    .catch((e) => {
+      showSnack(e.message, "red");
     });
 }
 

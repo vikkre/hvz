@@ -1,6 +1,6 @@
 flask
-# psycopg2-binary
 psycopg2
 Flask-SQLAlchemy
 Flask-Migrate
 flask-cors
+uWSGI

@@ -6,53 +6,5 @@ tfoot {
   background-color: var(--color-bg-secondary);
 }
 
-.snackContainer {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  display: grid;
-  grid-template-areas: "snackbar" "snackbar" "snackbar";
-  border: solid 10px black;
-}
-/* This is from w3c scools ¯\_(ツ)_/¯¯\_(ツ)_/¯
-/* The snackbar - position it at the bottom and in the middle of the screen */
-.snackBar {
-  min-width: 250px; 
-  background-color: var(--color-secondary);
-  color: var(--color-text-secondary);
-  text-align: center; 
-  border-radius: var(--border-radius)  var(--border-radius)  0 0;
-  padding: 16px; 
-  margin-bottom: 16px;
-}
-
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
-.snackBar.show {
-  visibility: visible; /* Show the snackbar */
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-  However, delay the fade out process for 2.5 seconds */
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 30px;
-    opacity: 1;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    bottom: 30px;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
-  }
 }
 
