@@ -1,20 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	<div>Hello World!</div>
-	<div class="bla">
-		<div class="blabla" id="21">
-			<ul>
-				<li></li>
-				<li></li>
-				<li></li>
-			</ul>
-		</div>
-	</div>
-</body>
+  <head>
+    <link rel="icon" href="https://via.placeholder.com/70x70" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./mvp.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <title>HVZ - Bestandsliste</title>
+  </head>
+
+  <body>
+    <h1>Aktueller Bestand</h1>
+    <template id="row_template">
+      <tr id="0" data-product_id="0">
+        <td><input type="text" name="name" /></td>
+        <td><input type="number" name="amount" value="0" /></td>
+        <td>
+          <a class="product_action_link" name="product_save">save</a>
+          <a class="product_action_link" name="product_delete">delete</a>
+        </td>
+      </tr>
+    </template>
+    <article>
+      <table>
+        <thead>
+          <tr>
+            <th>Artikel</th>
+            <th>Bestand</th>
+            <th>Aktion</th>
+          </tr>
+        </thead>
+        <tbody id="product_list"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Add a new Product</td>
+          </tr>
+          <tr id="newProduct" data-product_id="0">
+            <td><input name="name" type="text" /></td>
+            <td><input name="amount" type="number" value="0" /></td>
+            <td>
+              <a class="product_action_link" id="product_add">add</a>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </article>
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>
+          Delete the product &quot;<span id="confirm_product_name"></span
+          >&quot;?
+        </p>
+        <button id="confirmDelete">Yes,</button>
+        <button id="denyDelete">No</button>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script type="module" src="script.js"></script>
 </html>

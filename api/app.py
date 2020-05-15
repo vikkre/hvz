@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from sqlalchemy.exc import OperationalError
 import os
 import time
@@ -9,6 +10,7 @@ DB_CONNECTION_RETRY_WAIT_SECONDS = 5
 
 
 app = Flask(__name__)
+CORS(app)
 
 database = os.environ["DATABASE"]
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:admin@database/" + database
