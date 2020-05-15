@@ -1,6 +1,7 @@
 from app import app, db
 from flask import request, jsonify
 from dataclasses import dataclass
+from sqlalchemy import exc
 
 
 class Product(db.Model):
@@ -29,7 +30,12 @@ class ProductResult:
         self.product = product
 
     def to_dict(self):
-        return {'product':self.product.to_dict(), 'status': self.status, 'error': self.error}
+        if self.product is None:
+            product = None
+        else:
+            product = self.product.to_dict()
+
+        return {'product':product, 'status': self.status, 'error': self.error}
 
 
 @app.route('/products', methods=['GET'])
@@ -47,7 +53,7 @@ def post_products():
         try:
             db.session.commit()
             pr.status = 'ok'
-        except Exception as e :
+        except exc.IntegrityError:
             db.session.rollback()
             pr.status = 'failed' 
             pr.error = "product_alredy_exits"
@@ -58,16 +64,27 @@ def post_products():
 def put_products():
     products = []
     for product_update in request.json:
-        product_result = ProductResult(Product.query.get(product_update["id"]))
-        products.append(product_result)
+        if "id" not in product_update:
+            product_result = ProductResult(None)
+            product_result.status = "failed"
+            product_result.error = "id_not_provided"
+            products.append(product_result)
+        else:
+            product_result = ProductResult(Product.query.get(product_update["id"]))
 
-        if "name" in product_update:
-            product_result.product.name = product_update["name"]
-        if "amount" in product_update:
-            product_result.product.amount = product_update["amount"]
+            if product_result.product is None:
+                product_result.status = "failed"
+                product_result.error = "product_not_found"
+            else:
+                if "name" in product_update:
+                    product_result.product.name = product_update["name"]
+                if "amount" in product_update:
+                    product_result.product.amount = product_update["amount"]
 
-        db.session.commit()
-        product_result.status = 'ok'
+                db.session.commit()
+                product_result.status = 'ok'
+            
+            products.append(product_result)
 
     return jsonify([p.to_dict() for p in products])
 
@@ -76,11 +93,23 @@ def put_products():
 def delete_products():
     products = []
     for product_update in request.json:
-        product_result = ProductResult(Product.query.get(product_update["id"]))
-        db.session.delete(product_result.product)
+        if "id" not in product_update:
+            product_result = ProductResult(None)
+            product_result.status = "failed"
+            product_result.error = "id_not_provided"
+            products.append(product_result)
+        else:
+            product_result = ProductResult(Product.query.get(product_update["id"]))
 
-        db.session.commit()
-        product_result.status = 'ok'
-        products.append(product_result)
+            if product_result.product is None:
+                product_result.status = "failed"
+                product_result.error = "product_not_found"
+            else:
+                db.session.delete(product_result.product)
+
+                db.session.commit()
+                product_result.status = 'ok'
+            
+            products.append(product_result)
 
     return jsonify([p.to_dict() for p in products])

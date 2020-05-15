@@ -26,10 +26,9 @@ while try_connect:
         db.create_all()
         try_connect = False
     except OperationalError:
-        print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds")
+        print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds", flush=True)
         time.sleep(DB_CONNECTION_RETRY_WAIT_SECONDS)
-
 
 @app.route('/')
 def index():
-    return "Hello World\n"
+    return "Hello World!\n"
