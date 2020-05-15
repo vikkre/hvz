@@ -1,12 +1,5 @@
 version: '3'
 services:
-  database:
-    image: postgres:latest
-    container_name: hvz_test_db
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: hvz_test
 
   test_api:
     build: ./test_api
@@ -18,3 +11,11 @@ services:
     environment:
       FLASK_ENV: development
       DATABASE: hvz_test
+
+  database:
+    image: postgres:latest
+    container_name: hvz_test_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: hvz_test
