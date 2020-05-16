@@ -5,8 +5,9 @@ const row_template = document.getElementById('row_template')
 const product_list = document.getElementById('product_list')
 const product_add = document.getElementById('product_add')
 
+const api_root = '/api'
 // const api_root = 'http://localhost/api'
-const api_root = 'http://localhost:5000'
+// const api_root = 'http://localhost:5000'
 api.setRoot(api_root)
 
 product_add.addEventListener('click', e => {
