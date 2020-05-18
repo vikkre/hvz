@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  web:
+    image: nginx:latest
+    container_name: hvz_development_web
+    depends_on:
+      - api
+    volumes:
+      - ./web-server/nginx.conf:/etc/nginx/nginx.conf
+      - ../../frontend/:/www/
+    ports:
+      - 80:80
+      - 443:443
+
+  # run "flask run" inside /code to start flask
+  api:
+    build: ./api
+    container_name: hvz_development_api
+    tty: true
+    depends_on:
+      - database
+    volumes:
+      - ../../api/:/code/
+    environment:
+      FLASK_ENV: development
+      DATABASE: hvz_development
+
+  database:
+    image: postgres:latest
+    container_name: hvz_development_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: hvz_development

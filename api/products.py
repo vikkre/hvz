@@ -1,6 +1,7 @@
 from app import app, db
 from flask import request, jsonify
 from dataclasses import dataclass
+from sqlalchemy import exc
 
 
 class Product(db.Model):
@@ -25,11 +26,12 @@ class ProductResult:
     status: str = None
     error: str = None
 
-    def __init__(self, product):
+    def __init__(self, product=None):
         self.product = product
 
     def to_dict(self):
-        return {'product':self.product.to_dict(), 'status': self.status, 'error': self.error}
+        product = None if self.product is None else self.product.to_dict()
+        return {'product': product, 'status': self.status, 'error': self.error}
 
 
 @app.route('/products', methods=['GET'])
@@ -37,50 +39,87 @@ def get_products():
     return jsonify([p.to_dict() for p in Product.query.all()])
 
 
+@app.route('/products/<id>', methods=['GET'])
+def get_products_by_id(id):
+    product_result = ProductResult()
+
+    try:
+        product_result.product = Product.query.get(id)
+
+        if product_result.product is None:
+            product_result.status = "failed"
+            product_result.error = "product_not_found"
+        else:
+            product_result.status = 'ok'
+
+    except exc.DatabaseError:
+        product_result.status = "failed"
+        product_result.error = "id_wrong_format"
+
+    return jsonify(product_result.to_dict())
+
+
 @app.route('/products', methods=['POST'])
 def post_products():
-    products = []
-    for jp in request.json:
-        pr = ProductResult(Product.from_dict(jp))
-        products.append(pr)
-        db.session.add(pr.product)
-        try:
+    product_result = ProductResult(Product.from_dict(request.json))
+    db.session.add(product_result.product)
+
+    try:
+        db.session.commit()
+        product_result.status = 'ok'
+    except exc.IntegrityError:
+        db.session.rollback()
+        product_result.status = 'failed' 
+        product_result.error = "product_alredy_exits"
+
+    return jsonify(product_result.to_dict())
+
+
+@app.route('/products/<id>', methods=['PUT'])
+def put_products(id):
+    product_result = ProductResult()
+
+    try:
+        product_update = request.json
+        product_result.product = Product.query.get(id)
+
+        if product_result.product is None:
+            product_result.status = "failed"
+            product_result.error = "product_not_found"
+        else:
+            if "name" in product_update:
+                product_result.product.name = product_update["name"]
+            if "amount" in product_update:
+                product_result.product.amount = product_update["amount"]
+
+            product_result.status = 'ok'
             db.session.commit()
-            pr.status = 'ok'
-        except Exception as e :
-            db.session.rollback()
-            pr.status = 'failed' 
-            pr.error = "product_alredy_exits"
-    return jsonify([p.to_dict() for p in products])
+
+    except exc.DatabaseError:
+        product_result.status = "failed"
+        product_result.error = "id_wrong_format"
+
+    return jsonify(product_result.to_dict())
 
 
-@app.route('/products', methods=['PUT'])
-def put_products():
-    products = []
-    for product_update in request.json:
-        product_result = ProductResult(Product.query.get(product_update["id"]))
-        products.append(product_result)
+@app.route('/products/<id>', methods=['DELETE'])
+def delete_products(id):
+    product_result = ProductResult()
 
-        if "name" in product_update:
-            product_result.product.name = product_update["name"]
-        if "amount" in product_update:
-            product_result.product.amount = product_update["amount"]
+    try:
+        product_result.product = Product.query.get(id)
 
-        db.session.commit()
-        product_result.status = 'ok'
+        if product_result.product is None:
+            product_result.status = "failed"
+            product_result.error = "product_not_found"
+        else:
+            db.session.delete(product_result.product)
 
-    return jsonify([p.to_dict() for p in products])
+            db.session.commit()
+            product_result.status = 'ok'
 
+    except exc.DatabaseError:
+        product_result.status = "failed"
+        product_result.error = "id_wrong_format"
 
-@app.route('/products', methods=['DELETE'])
-def delete_products():
-    products = []
-    for product_update in request.json:
-        product_result = ProductResult(Product.query.get(product_update["id"]))
-        db.session.delete(product_result.product)
-
-        db.session.commit()
-        product_result.status = 'ok'
-        products.append(product_result)
-
-    return jsonify([p.to_dict() for p in products])
+    return jsonify(product_result.to_dict())
