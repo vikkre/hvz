@@ -1,6 +1,6 @@
 class Page():
     def __init__(self, driver):
-        self.driver: webdriver = driver 
+        self.driver = driver 
         driver.implicitly_wait(2)
 
     @property
