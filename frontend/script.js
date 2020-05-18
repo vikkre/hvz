@@ -5,9 +5,18 @@ const row_template = document.getElementById('row_template')
 const product_list = document.getElementById('product_list')
 const product_add = document.getElementById('product_add')
 
-const api_root = 'http://localhost/api'
-// const api_root = 'http://localhost:5000'
-api.setRoot(api_root)
+async function findApiUrl() {
+  const urls = ['/api', 'http://localhost/api', 'http://localhost:5000']
+  const requests = urls.map(url => fetch(url))
+  const result = await Promise.race(requests).then(x => x.url)
+  return result
+}
+
+findApiUrl().then(api_root => {
+  api.setRoot(api_root)
+  ShowSnack(`Using api at ${api_root}`)
+  loadData()
+})
 
 product_add.addEventListener('click', e => {
   e.preventDefault()
@@ -74,7 +83,7 @@ async function insertProduct(data) {
     ShowSnack(`Product "${data.name}" added.`)
     loadData()
   } catch (error) {
-    ShowSnack(error.message|| error, 'red')
+    ShowSnack(error.message || error, 'red')
   }
 }
 
@@ -84,7 +93,7 @@ async function saveProduct(data) {
     ShowSnack(`Product "${data.name}" saved.`)
     loadData()
   } catch (error) {
-    ShowSnack(error.message|| error, 'red')
+    ShowSnack(error.message || error, 'red')
   }
 }
 
@@ -94,7 +103,7 @@ async function deleteProduct(data) {
     ShowSnack(`Product "${data.name}" deleted.`)
     loadData()
   } catch (error) {
-    ShowSnack(error.message|| error, 'red')
+    ShowSnack(error.message || error, 'red')
   }
 }
 
@@ -104,8 +113,6 @@ async function loadData() {
     ShowSnack(`Loaded ${result.length} products.`)
     fillTable(result)
   } catch (e) {
-    ShowSnack(error.message|| error, 'red')
+    ShowSnack(e.message || e, 'red')
   }
 }
-
-loadData()
