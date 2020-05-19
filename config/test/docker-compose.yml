@@ -2,7 +2,12 @@ version: '3'
 services:
 
   test_api:
-    build: ./test_api
+    build:
+      context: ../api
+      args:
+        SPECIAL_REQUIREMENTS: "test-requirements.txt"
+
+    entrypoint: ["pytest", "-v"]
     container_name: hvz_test_api
     depends_on:
       - database
