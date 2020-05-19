@@ -67,7 +67,7 @@ def post_products():
     try:
         db.session.commit()
         product_result.status = 'ok'
-    except exc.IntegrityError:
+    except exc.IntegrityError as error:
         db.session.rollback()
         product_result.status = 'failed' 
         product_result.error = "product_alredy_exits"
