@@ -7,15 +7,20 @@ services:
     depends_on:
       - api
     volumes:
-      - ./config/web-server/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/web-server/production-nginx.conf:/etc/nginx/nginx.conf
       - ./frontend/:/www/
     ports:
       - 80:80
       - 443:443
 
   api:
-    build: ./config/api
+    build:
+      context: ./config/api
+      args:
+        SPECIAL_REQUIREMENTS: "production-requirements.txt"
+
     container_name: hvz_api
+    entrypoint: ["uwsgi", "--ini", "app.ini"]
     depends_on:
       - database
     volumes:

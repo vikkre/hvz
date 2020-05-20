@@ -3,9 +3,10 @@ import pytest
 
 from app import app, db
 from products import Product
+from test.create_test_data import create_test_data
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client_app():
 	db.drop_all()
 	db.create_all()
@@ -15,24 +16,16 @@ def client_app():
 	return ret
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client_products():
-	db.drop_all()
-	db.create_all()
-
-	milch = Product(name='Milch', amount=5)
-	burger = Product(name='Burger', amount=50)
-
-	db.session.add(milch)
-	db.session.add(burger)
-	db.session.commit()
-
-	expected = [
-		milch.to_dict(),
-		burger.to_dict()
-	]
+	expected = create_test_data()
 
 	ret = app.test_client()
 	ret.expected = expected
 
 	return ret
+
+
+def pytest_exception_interact(node, call, report):
+	if report.failed:
+		db.session.rollback()

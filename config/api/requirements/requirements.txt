@@ -2,5 +2,4 @@ flask
 psycopg2
 Flask-SQLAlchemy
 Flask-Migrate
-Flask-CORS
-pytest
+flask-cors
