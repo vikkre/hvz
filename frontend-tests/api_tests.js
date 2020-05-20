@@ -1,5 +1,5 @@
 import * as api from "../frontend/products_api.js";
-const URL = "http://localhost:5000";
+const URL = "http://localhost/api";
 
 function newUniqueProductName() {
   return `product ${new Date().toISOString()}`;

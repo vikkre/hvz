@@ -1,9 +1,49 @@
-.product_action_link {
-  cursor: pointer;
+@import url("https://fonts.xz.style/serve/fira-code.css");
+:root {
+	--nc-font-sans: 'Fira Code', monospace;
+	--nc-font-mono: 'Fira Code', monospace;
+	--nc-tx-1: #FFFFFF;
+	--nc-tx-2: #EEEEEE;
+	--nc-bg-1: #000000;
+	--nc-bg-2: #002700;
+	--nc-bg-3: #005800;
+	--nc-lk-1: #00FF00;
+	--nc-lk-2: #00c200;
+	--nc-lk-tx: #000000;
+	--nc-ac-1: #00FF00;
+	--nc-ac-tx: #000000;
 }
 
-tfoot {
-  background-color: var(--nc);
+.product_action_link {
+  cursor: pointer;
+  background-color: var(--nc-lk-2);
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-top: 10px;
+}
+
+.product_row {
+  /* border: 1px white solid; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.product_row input {
+  /* border: 1px white solid; */
+  margin-right: 10px;
+}
+
+@media(max-width: 700px){
+  .product_row {
+    flex-direction: column;
+  }
+}
+
+.product_actions {
+  /* border: 1px solid lightgray; */
+  padding: 10px;
+  width: auto;
 }
 
 /* The Modal (background) */
