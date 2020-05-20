@@ -5,65 +5,79 @@ export function setRoot(root) {
 }
 
 export async function loadProducts() {
-  const result = await fetch(`${api_root}/products`)
-    .then((ret) => {
-      if (!ret.ok) {
-        throw `Could not load products. HTTP info: ${ret.status} ${ret.statusText}`
-      }
-      return ret.json();
-    })
-    .then((data) => {
-      return data;
-    });
-
-  return result;
+  try {
+    const ret = await fetch(`${api_root}/products`);
+    return await ret.json();
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not load Products.");
+  }
 }
 
-async function upsertProduct(data, http_method, op_name) {
-  const dataJSON = JSON.stringify(data);
-  const result = await fetch(`${api_root}/products`, {
-    method: http_method,
-    headers: { "Content-Type": "application/json" },
-    body: dataJSON,
-  })
-    .then((result) => {
-      if (!result.ok) {
-        throw `Backend error: <br> ${result.statusText}`;
-      }
-      return result.json();
-    })
-    .then((data) => {
-      if (data.error) {
-        throw `Error when ${op_name} product<br>${data.error}`;
-      } else {
-        return data;
-      }
-    });
-  return result;
-}
 
 export async function saveProduct(data) {
-  return await upsertProduct(data, "PUT", "saving");
+  try {
+    const dataJSON = JSON.stringify(data);
+    const result = await fetch(`${api_root}/products/${data.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: dataJSON,
+    });
+    if (!result.ok) {
+      throw `Backend error: <br> ${result.statusText}`;
+    }
+    const json = await result.json();
+    if (json.error) {
+      throw `Error when saving product<br>${json.error}`;
+    }
+    return json;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not save Product.");
+  }
 }
 
 export async function insertProduct(data) {
-  return await upsertProduct(data, "POST", "inserting");
+  try {
+    const dataJSON = JSON.stringify(data);
+    const result = await fetch(`${api_root}/products`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: dataJSON,
+    });
+    if (!result.ok) {
+      throw `Backend error: <br> ${result.statusText}`;
+    }
+    const json = await result.json();
+    if (json.error) {
+      throw `Error when inserting product<br>${json.error}`;
+    }
+    return json;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not save Product.");
+  }
 }
 
 export async function deleteProduct(product_id) {
-  const dataJSON = JSON.stringify([{ id: product_id }]);
-  const result = await fetch(`${api_root}/products`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: dataJSON,
-  })
-    .then((result) => result.json())
-    .then((data) => {
-      if (data[0].error) {
-        throw `Error when saving product<br>${data[0].error}`;
-      } else {
-        return data;
-      }
-    });
-  return result;
+  try {
+    const dataJSON = JSON.stringify([{ id: product_id }]);
+    const result = await fetch(`${api_root}/products/${product_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: dataJSON,
+    })
+      .then((result) => result.json())
+      .then((data) => {
+        if (data && data.error) {
+          throw `Error when deleting product<br>${data[0].error}`;
+        } else {
+          return data;
+        }
+      });
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw new Error("could not delete product");
+  }
 }

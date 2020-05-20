@@ -28,7 +28,7 @@ export function ShowModal(text, yes_function) {
 }
 
 
-export function ShowSnack(text, color = 'var(--color') {
+export function ShowSnack(text, color = 'var(--nc-lk-2') {
   Toastify({
     text: text,
     duration: 5000,
