@@ -3,7 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from page import Page
 
-PAGE_URL = 'http://127.0.0.1:5500/frontend'
+# PAGE_URL = 'http://127.0.0.1:5500/frontend'
+PAGE_URL = 'http://192.168.2.113'
 
 
 def test_page(selenium):
