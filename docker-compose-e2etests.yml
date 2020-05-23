@@ -5,18 +5,13 @@ services:
     image: selenium/standalone-chrome
     container_name: hvz_selenium
     shm_size: '2gb' 
-
     depends_on:
       - web
-    ports:
-      - 4444:4444
 
   e2etests:
     build:
       context: ./config/e2etests
-
     container_name: hvz_e2etests
-    # entrypoint: ["sh"]
     depends_on:
       - selenium
     volumes:
