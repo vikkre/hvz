@@ -1,19 +1,21 @@
-import { ShowModal, ShowSnack } from "./modal.js";
+import { ShowModal, ShowSnack, WriteLog } from "./modal.js";
 import * as api from "./products_api.js";
 
 const row_template = document.getElementById("row_template");
 const product_list = document.getElementById("product_list");
 const product_add = document.getElementById("product_add");
 
+WriteLog("page loaded");
+
 async function findApiUrl() {
-  const ralfUrl = new URLSearchParams(window.location.search).get("api");
-  if (ralfUrl) {
-    return ralfUrl;
-  }
+  // const ralfUrl = new URLSearchParams(window.location.search).get("api");
+  // if (ralfUrl) {
+  //   return ralfUrl;
+  // }
   const urls = ["/api", "http://localhost/api", "http://localhost:5000"];
-  const requests = urls.map((url) => fetch(url));
-  const result = await Promise.race(requests).then((x) => x.url);
-  return result;
+  // const requests = urls.map((url) => fetch(url));
+  // const result = await Promise.race(requests).then((x) => x.url);
+  return urls[0];
 }
 
 findApiUrl().then((api_root) => {
@@ -75,7 +77,6 @@ function fillTable(data) {
     cells[1].value = prod.amount;
     product_list.appendChild(new_row);
   });
-
 }
 
 async function insertProduct(data) {

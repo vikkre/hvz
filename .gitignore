@@ -1,8 +1,11 @@
 .venv
+venv
+e2etests/assets
+e2etests/test-report.html
+
 __pychache__
 *.pyc
 
 .vscode
 .pytest_chache
 geckodriver.log
-node_modules/

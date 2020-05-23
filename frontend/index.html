@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 
-  <title>HVZ - Bestandsliste</title>
+  <title>HVZ - Bestandsliste 17:53</title>
 </head>
 
 <body>
@@ -35,7 +35,7 @@
       <p>Add a new Product</p>
       <div class="product_row" id="newProduct" data-product_id="0">
         <div><input name="name" type="text" placeholder="name" /></div>
-        <div><input name="amount" type="number" placeholder="amount" /></div>
+        <div><input name="amount" type="number" placeholder="amount" default="0" /></div>
         <div class="product_actions">
           <a class="product_action_link" id="product_add">add</a>
         </div>
@@ -52,6 +52,9 @@
       <button id="confirmDelete">Yes</button>
       <button id="denyDelete">No</button>
     </div>
+  </div>
+  <div id="myLog">
+
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
