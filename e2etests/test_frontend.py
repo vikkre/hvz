@@ -27,8 +27,45 @@ def test_add_new_product(selenium):
     p.set_new_product_name(f'test-product {datetime.now().timestamp()}')
     p.set_new_product_amount('1')
     p.click_add_new_product()
-    time.sleep(5)
+    time.sleep(2)
     new_rows_count = len(p.product_row_elements)
     assert new_rows_count == (old_rows_count + 1)
 
+
+def test_delete_product(selenium):
+    selenium.get(PAGE_URL)
+    p = Page(selenium)
+    p.set_new_product_name(f'test-product {datetime.now().timestamp()}')
+    p.set_new_product_amount('1')
+    p.click_add_new_product()
+    time.sleep(2)
+    old_rows_count = len(p.product_row_elements)
+    p.click_delete_product(0)
+    time.sleep(2)
+    p.click_confirm_delete()
+    time.sleep(2)
+    new_rows_count = len(p.product_row_elements)
+    assert new_rows_count == (old_rows_count - 1)
+
+
+def test_modify_product(selenium):
+    selenium.get(PAGE_URL)
+    p = Page(selenium)
+    initial_name = f'test-product {datetime.now().timestamp()}'
+    p.set_new_product_name(initial_name)
+    p.set_new_product_amount('1')
+    p.click_add_new_product()
+    time.sleep(2)
+    index = p.get_product_index_by_name(initial_name)
+    new_name = f'test-product {datetime.now().timestamp()}'
+    p.change_product_name(index, new_name)
+    p.change_product_amount(index, 2)
+    p.click_save_product(index)
+    time.sleep(2)
+    new_index = p.get_product_index_by_name(new_name)
+    stored_name = p.get_product_name(new_index)
+    stored_amount = p.get_product_amount(new_index)
+
+    assert stored_name == new_name
+    assert stored_amount == 2
 

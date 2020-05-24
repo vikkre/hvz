@@ -38,3 +38,48 @@ class Page():
 
     def click_add_new_product(self):
         self.new_product_element.find_element_by_id("product_add").click()
+
+    def click_delete_product(self, index):
+        rows = self.product_row_elements
+        row_to_remove = rows[index]
+        delete_link = row_to_remove.find_element_by_name("product_delete")
+        delete_link.click()
+    
+    def click_confirm_delete(self):
+        confirm_delete = self.driver.find_element_by_id("confirmDelete")
+        confirm_delete.click()
+
+    def get_product_index_by_name(self, name):
+        for i, row in enumerate(self.product_row_elements):
+            name_in_row = self.get_product_name(i)
+            if name_in_row == name:
+                return i
+        return None
+    
+    def get_product_value(self, index, input_name):
+        row = self.product_row_elements[index]
+        input = row.find_element_by_name(input_name)
+        return input.get_attribute("value")
+
+    def get_product_name(self, index):
+        return self.get_product_value(index, "name")
+
+    def get_product_amount(self, index):
+        return int(self.get_product_value(index, "amount"))
+
+    def click_save_product(self, index):
+        row = self.product_row_elements[index]
+        btn = row.find_element_by_name("product_save")
+        btn.click()
+
+    def change_product_value(self, index, input_name, new_value):
+        row = self.product_row_elements[index]
+        input = row.find_element_by_name(input_name)
+        input.clear()
+        input.send_keys(new_value)
+
+    def change_product_name(self, index, new_value):
+        self.change_product_value(index, "name", new_value)
+
+    def change_product_amount(self, index, new_value):
+        self.change_product_value(index, "amount", new_value)

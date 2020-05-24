@@ -1,5 +1,5 @@
 .venv\scripts\activate
 start powershell
-docker-compose up --build
-docker-compose run --rm --name flask_debug -p 5000:5000 api sh
-pushd config/test; docker-compose up --build
+docker-compose -f docker-compose.yml -f docker-compose-e2etests.yml build
+docker-compose -f docker-compose.yml -f docker-compose-e2etests.yml down
+docker-compose -f docker-compose.yml -f docker-compose-e2etests.yml run -d --rm --name hvz_debug e2etests sh
