@@ -2,6 +2,7 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from page import Page
+import time
 
 PAGE_URL = 'http://web'
 
@@ -26,6 +27,7 @@ def test_add_new_product(selenium):
     p.set_new_product_name(f'test-product {datetime.now().timestamp()}')
     p.set_new_product_amount('1')
     p.click_add_new_product()
+    time.sleep(5)
     new_rows_count = len(p.product_row_elements)
     assert new_rows_count == (old_rows_count + 1)
 
