@@ -3,16 +3,9 @@ const close = modal.querySelector(".close");
 const product_name = modal.querySelector("#confirm_product_name");
 const yes = modal.querySelector("#confirmDelete");
 const no = modal.querySelector("#denyDelete");
-const myLogElement = document.getElementById("myLog");
 
 function hideModal() {
   modal.style.display = "none";
-}
-
-export function WriteLog(txt) {
-  const logEntry = document.createElement("p");
-  logEntry.innerText = txt;
-  myLogElement.appendChild(logEntry);
 }
 
 export function ShowModal(text, yes_function) {
@@ -31,12 +24,10 @@ export function ShowModal(text, yes_function) {
   }
 
   product_name.innerText = text;
-  WriteLog(`ShowModal: ${text}`);
   modal.style.display = "block";
 }
 
 export function ShowSnack(text, color = "var(--nc-lk-2") {
-  WriteLog(`ShowSnack: ${text}`);
   Toastify({
     text: text,
     duration: 5000,
