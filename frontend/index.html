@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- <link rel="stylesheet" href="./mvp.css" /> -->
   <link rel="stylesheet" href="https://newcss.net/new.min.css">
-  <link rel="stylesheet" href="https://newcss.net/theme/night.css">
   <link rel="stylesheet" href="https://newcss.net/theme/terminal.css">
 
 
@@ -18,39 +17,55 @@
 </head>
 
 <body>
-  <header>Aktueller Bestand</header>
-  <template id="row_template">
-    <div class="product_row" id="0" data-product_id="0">
-      <div><input type="text" name="name" /></div>
-      <div><input type="number" name="amount" value="0" /></div>
-      <div class="product_actions">
-        <a class="product_action_link" name="product_save">save</a>
-        <a class="product_action_link" name="product_delete">delete</a>
-      </div>
-    </div>
-  </template>
-  <article>
-    <div id="product_list"></div>
-    <div>
-      <p>Add a new Product</p>
-      <div class="product_row" id="newProduct" data-product_id="0">
-        <div><input name="name" type="text" placeholder="name" /></div>
-        <div><input name="amount" type="number" placeholder="amount" default="0" /></div>
+  <div id="shopping_list">
+    <a href="" id="data_entry">Data Entry</a>
+    <table>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+  <div id="container">
+    <header>Aktueller Bestand</header>
+    <template id="row_template">
+      <div class="product_row">
+        <div><input type="text" name="name" /></div>
+        <div><input type="number" name="amount" value="0" size="5" /></div>
+        <div><input name="required_amount" type="number" size="5 " /></div>
+        <div></div>
         <div class="product_actions">
-          <a class="product_action_link" id="product_add">add</a>
+          <a class="product_action_link" name="product_save">save</a>
+          <a class="product_action_link" name="product_delete">delete</a>
         </div>
       </div>
-    </div>
-  </article>
-  <div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <p>
-        Delete the product &quot;<span id="confirm_product_name"></span>&quot;?
-      </p>
-      <button id="confirmDelete">Yes</button>
-      <button id="denyDelete">No</button>
+    </template>
+    <article>
+      <div class="menu">
+        <a href="" id="toggle_shopping_list">Shopping List</a>
+      </div>
+      <div id="product_list"></div>
+      <div>
+        <p>Add a new Product</p>
+        <div class="product_row" id="newProduct">
+          <div><input name="name" type="text" placeholder="name" /></div>
+          <div><input name="amount" type="number" placeholder="amount" default="0" /></div>
+          <div><input name="required_amount" type="number" placeholder="required amount" default="0" /></div>
+          <div class="product_actions">
+            <a class="product_action_link" id="product_add">add</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>
+          Delete the product &quot;<span id="confirm_product_name"></span>&quot;?
+        </p>
+        <button id="confirmDelete">Yes</button>
+        <button id="denyDelete">No</button>
+      </div>
     </div>
   </div>
 </body>

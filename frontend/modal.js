@@ -30,7 +30,7 @@ export function ShowModal(text, yes_function) {
 export function ShowSnack(text, color = "var(--nc-lk-2") {
   Toastify({
     text: text,
-    duration: 5000,
+    duration: 900,
     close: true,
     gravity: "bottom", // `top` or `bottom`
     position: "right", // `left`, `center` or `right`
