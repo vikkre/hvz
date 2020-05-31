@@ -1,6 +1,6 @@
 class Page():
     def __init__(self, driver):
-        self.driver = driver 
+        self.driver = driver
         driver.implicitly_wait(2)
 
     @property
@@ -30,11 +30,18 @@ class Page():
     def new_product_amount_element(self):
         return self.new_product_element.find_element_by_name('amount')
 
+    @property
+    def new_product_required_amount_element(self):
+        return self.new_product_element.find_element_by_name('required_amount')
+
     def set_new_product_name(self, new_name):
         self.new_product_name_element.send_keys(new_name)
 
     def set_new_product_amount(self, new_amount):
         self.new_product_amount_element.send_keys(new_amount)
+
+    def set_new_product_required_amount(self, new_amount):
+        self.new_product_required_amount_element.send_keys(new_amount)
 
     def click_add_new_product(self):
         self.new_product_element.find_element_by_id("product_add").click()
@@ -44,7 +51,7 @@ class Page():
         row_to_remove = rows[index]
         delete_link = row_to_remove.find_element_by_name("product_delete")
         delete_link.click()
-    
+
     def click_confirm_delete(self):
         confirm_delete = self.driver.find_element_by_id("confirmDelete")
         confirm_delete.click()
@@ -55,7 +62,7 @@ class Page():
             if name_in_row == name:
                 return i
         return None
-    
+
     def get_product_value(self, index, input_name):
         row = self.product_row_elements[index]
         input = row.find_element_by_name(input_name)
@@ -66,6 +73,9 @@ class Page():
 
     def get_product_amount(self, index):
         return int(self.get_product_value(index, "amount"))
+
+    def get_product_required_amount(self, index):
+        return int(self.get_product_value(index, "required_amount"))
 
     def click_save_product(self, index):
         row = self.product_row_elements[index]
@@ -83,3 +93,6 @@ class Page():
 
     def change_product_amount(self, index, new_value):
         self.change_product_value(index, "amount", new_value)
+
+    def change_product_required_amount(self, index, new_value):
+        self.change_product_value(index, "required_amount", new_value)
