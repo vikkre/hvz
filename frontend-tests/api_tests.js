@@ -36,7 +36,7 @@ describe("api.insertProduct", function () {
 
   it("should add a single product", async function () {
     const oldProducts = await api.loadProducts();
-    const newProduct = makeNewProduct({ amount: 0 });
+    const newProduct = makeNewProduct({ amount: 0, required_amount: 0 });
     const newSavedProduct = await api.insertProduct(newProduct);
     expect(newSavedProduct).not.toBeNull();
     const newProducts = await api.loadProducts();
@@ -54,7 +54,7 @@ describe("api.insertProduct", function () {
   });
 
   it("should throw an error if a product by the same name exists", async function () {
-    const newProduct = makeNewProduct({ amount: 0 });
+    const newProduct = makeNewProduct({ amount: 0, required_amount: 0 });
     await api.insertProduct(newProduct);
     await expectAsync(api.insertProduct(newProduct)).toBeRejectedWith(
       new Error("Could not save Product.")
@@ -68,7 +68,7 @@ describe("api.saveProduct", function () {
   });
 
   it("should update the amount of a product", async function () {
-    const newProduct = makeNewProduct({ amount: 0 });
+    const newProduct = makeNewProduct({ amount: 0, required_amount: 0 });
     await api.insertProduct(newProduct);
     const newProducts = await api.loadProducts();
 
@@ -84,7 +84,7 @@ describe("api.saveProduct", function () {
   });
 
   it("should update the name of a product", async function () {
-    const newProduct = makeNewProduct({ amount: 0 });
+    const newProduct = makeNewProduct({ amount: 0, required_amount: 0 });
     await api.insertProduct(newProduct);
     const newProducts = await api.loadProducts();
 
@@ -100,7 +100,7 @@ describe("api.saveProduct", function () {
   });
 
   it("should throw an error if a product by the same name exists", async function () {
-    const newProduct = makeNewProduct({ amount: 0 });
+    const newProduct = makeNewProduct({ amount: 0 , required_amount: 0});
     const otherProductWithSameName = makeNewProduct(newProduct);
     await api.insertProduct(newProduct);
     await expectAsync(
@@ -114,15 +114,12 @@ describe("api.deleteProduct", function () {
     api.setRoot(URL);
   });
 
-  it("should just delete the f**** product", async function(){
-    const newProduct = makeNewProduct({ amount: 0 });
+  it("should just delete the f**** product", async function () {
+    const newProduct = makeNewProduct({ amount: 0, required_amount: 0 });
     const result = await api.insertProduct(newProduct);
-    await api.deleteProduct(result.product.id)
+    await api.deleteProduct(result.product.id);
 
-    const remainingProducts = await api.loadProducts()
-    expect(remainingProducts.find(p => p.id == result.product.id)).nothing()
-
+    const remainingProducts = await api.loadProducts();
+    expect(remainingProducts.find((p) => p.id == result.product.id)).nothing();
   });
-
-
 });

@@ -8,9 +8,19 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
+    required_amount = db.Column(db.Integer, nullable=False, server_default='0')
 
     def to_dict(self):
-        return {'id': self.id, 'name': self.name, 'amount': self.amount}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'amount': self.amount,
+            'required_amount': self.required_amount,
+            'needed_amount': self.get_needed_amount()
+        }
+
+    def get_needed_amount(self):
+        return max(self.required_amount - self.amount, 0)
 
     @staticmethod
     def from_dict(dict):
@@ -91,6 +101,8 @@ def put_products(id):
                 product_result.product.name = product_update["name"]
             if "amount" in product_update:
                 product_result.product.amount = product_update["amount"]
+            if "required_amount" in product_update:
+                product_result.product.required_amount = product_update["required_amount"]
 
             product_result.status = 'ok'
             db.session.commit()

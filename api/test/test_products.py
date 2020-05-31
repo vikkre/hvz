@@ -5,12 +5,14 @@ def test_get_products(client_products):
 
 
 def test_get_single_product(client_products):
-	id = client_products.expected[0]["id"]
+	id = client_products.expected[1]["id"]
 
 	get_response = client_products.get("/products/" + str(id))
 	assert get_response.json["status"] == "ok"
-	assert get_response.json["product"]["name"] == client_products.expected[0]["name"]
-	assert get_response.json["product"]["amount"] == client_products.expected[0]["amount"]
+	assert get_response.json["product"]["name"] == client_products.expected[1]["name"]
+	assert get_response.json["product"]["amount"] == client_products.expected[1]["amount"]
+	assert get_response.json["product"]["required_amount"] == client_products.expected[1]["required_amount"]
+	assert get_response.json["product"]["needed_amount"] == 0
 
 
 def test_get_single_product_not_found(client_products):
@@ -24,7 +26,8 @@ def test_get_single_product_not_found(client_products):
 def test_post_products(client_products):
 	data = {
 		"name": "Kaffee",
-		"amount": 2
+		"amount": 2,
+		"required_amount": 3
 	}
 
 	post_response = client_products.post("/products", json=data)
@@ -37,7 +40,8 @@ def test_post_products(client_products):
 def test_post_products_double_insert(client_products):
 	data = {
 		"name": "Sahne",
-		"amount": 3
+		"amount": 3,
+		"required_amount": 3
 	}
 
 	post_response = client_products.post("/products", json=data)
@@ -52,16 +56,17 @@ def test_post_products_double_insert(client_products):
 
 
 def test_update_product(client_products):
-	new_milk_name = "Milch Milch"
+	new_milk_required_amount = 2
 	id = client_products.expected[0]["id"]
 
 	data = {
-		"name": new_milk_name
+		"required_amount": new_milk_required_amount
 	}
 	
 	put_response = client_products.put("/products/" + str(id), json=data)
 	assert put_response.json["status"] == "ok"
-	assert put_response.json["product"]["name"] == new_milk_name
+	assert put_response.json["product"]["required_amount"] == new_milk_required_amount
+	assert put_response.json["product"]["needed_amount"] == 0
 
 
 def test_update_product_no_product_found(client_products):
