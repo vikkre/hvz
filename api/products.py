@@ -8,7 +8,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
-    required_amount = db.Column(db.Integer, nullable=False)
+    required_amount = db.Column(db.Integer, nullable=False, server_default='0')
 
     def to_dict(self):
         return {
