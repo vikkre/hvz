@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate, upgrade
 from flask_cors import CORS
 from sqlalchemy.exc import OperationalError
 import os
@@ -20,18 +20,22 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-
 import products
 
 
-try_connect = True
-while try_connect:
+# db.create_all()
+while True:
     try:
-        db.create_all()
-        try_connect = False
+        with app.app_context():
+            upgrade()
+            print("Upgrade sucessful", flush=True)
+        break
     except OperationalError:
         print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds", flush=True)
         time.sleep(DB_CONNECTION_RETRY_WAIT_SECONDS)
+    except Exception as e:
+        print(e)
+        break
 
 @app.route('/')
 def index():
