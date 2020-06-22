@@ -1,8 +1,8 @@
 """add recipe tables
 
-Revision ID: f2b19e58775e
+Revision ID: 2c61cf0cd40c
 Revises: a0428a3744c0
-Create Date: 2020-06-16 08:30:41.438541
+Create Date: 2020-06-22 18:37:55.641771
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f2b19e58775e'
+revision = '2c61cf0cd40c'
 down_revision = 'a0428a3744c0'
 branch_labels = None
 depends_on = None
@@ -25,8 +25,10 @@ def upgrade():
     )
     op.create_table('recipe',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('text', sa.Text(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('name', sa.String(length=80), nullable=False),
+    sa.Column('text', sa.Text(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('menu_has_recipe',
     sa.Column('menu_id', sa.Integer(), nullable=True),

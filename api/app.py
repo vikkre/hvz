@@ -20,7 +20,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-import products, recipes, recipe_amounts, menus
+import products, recipes, recipe_has_product, menus
 
 
 # db.create_all()

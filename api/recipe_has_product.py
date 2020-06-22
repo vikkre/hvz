@@ -10,3 +10,17 @@ class RecipeHasProduct(db.Model):
 	recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), primary_key=True)
 	amount = db.Column(db.Integer, nullable=False)
 	product = db.relationship("Product")
+
+	def to_dict(self):
+		return {
+			'product_id': self.product_id,
+			'recipe_id': self.recipe_id,
+			'amount': self.amount
+		}
+
+	@staticmethod
+	def from_dict(dict):
+		return RecipeHasProduct(**dict)
+
+	def __repr__(self):
+		return f'<RecipeHasProduct ({self.product_id},{self.recipe_id}), amount={self.amount}>'
