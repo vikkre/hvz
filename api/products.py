@@ -63,7 +63,7 @@ def get_products_by_id(id):
 		else:
 			product_result.status = 'ok'
 
-	except exc.DatabaseError:
+	except exc.DataError:
 		product_result.status = "failed"
 		product_result.error = "id_wrong_format"
 
@@ -108,7 +108,7 @@ def put_products(id):
 			product_result.status = 'ok'
 			db.session.commit()
 
-	except exc.DatabaseError:
+	except exc.DataError:
 		product_result.status = "failed"
 		product_result.error = "id_wrong_format"
 
@@ -131,7 +131,7 @@ def delete_products(id):
 			db.session.commit()
 			product_result.status = 'ok'
 
-	except exc.DatabaseError:
+	except exc.DataError:
 		product_result.status = "failed"
 		product_result.error = "id_wrong_format"
 
