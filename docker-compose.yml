@@ -8,7 +8,7 @@ services:
       - api
     volumes:
       - ./config/web-server/production-nginx.conf:/etc/nginx/nginx.conf
-      - ./frontend/:/www/
+      - ./frontend/dist/:/www/
     ports:
       - 80:80
       - 443:443
@@ -35,3 +35,5 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: hvz_production
+    ports:
+      - 5432:5432

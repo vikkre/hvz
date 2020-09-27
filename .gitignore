@@ -9,3 +9,6 @@ __pychache__
 .vscode
 .pytest_chache
 geckodriver.log
+frontend/dist
+frontend/.cache
+frontend/node_modules

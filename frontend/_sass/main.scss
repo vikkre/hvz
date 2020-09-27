@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+// Customization
+
+// You can easily customize Bulma with your own variables.
+// Just uncomment the following block to see the result.
+
+// 1. Import the initial variables
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+// https://cdn.jsdelivr.net/npm/open-fonts@1.1.1/fonts/inter.min.css
+@import url("https://cdn.jsdelivr.net/npm/open-fonts@1.1.1/fonts/inter.min.css");
+
+// 2. Set your own initial variables
+$color-1: #166678;
+$color-2: #e3f7f5;
+$color-3: #0f6174;
+$color-4: #a9ced2;
+$color-5: #397f8e;
+$color-6: #19687a;
+
+// Update the blue shade, used for links
+$blue: $color-1;
+// Add pink and its invert
+$pink: $color-4;
+$pink-invert: $color-5;
+// Update the sans-serif font family
+$family-sans-serif: "Inter", "Helvetica", "Arial", sans-serif;
+
+// 3. Set the derived variables
+// Use the new pink as the primary color
+$primary: $pink;
+$primary-invert: $pink-invert;
+$light: $color-2;
+
+// 4. Import the rest of Bulma
+/*
+*/
+
+@import "../node_modules/bulma/bulma";
