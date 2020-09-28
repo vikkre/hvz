@@ -15,12 +15,12 @@ def test_get_single_product(client_products):
 	assert get_response.json["product"]["needed_amount"] == 0
 
 
-def test_get_single_product_not_found(client_products):
+def test_get_single_not_found(client_products):
 	id = 12345
 
 	get_response = client_products.get("/products/" + str(id))
 	assert get_response.json["status"] == "failed"
-	assert get_response.json["error"] == "product_not_found"
+	assert get_response.json["error"] == "not_found"
 
 
 def test_post_products(client_products):
@@ -49,7 +49,7 @@ def test_post_products_double_insert(client_products):
 
 	post_response = client_products.post("/products", json=data)
 	assert post_response.json["status"] == "failed"
-	assert post_response.json["error"] == "product_alredy_exits"
+	assert post_response.json["error"] == "alredy_exits"
 
 	get_response = client_products.get("/products")
 	assert len(get_response.json) == len(client_products.expected) + 1
@@ -77,7 +77,7 @@ def test_update_product_no_product_found(client_products):
 
 	put_response = client_products.put("/products/" + str(id), json=data)
 	assert put_response.json["status"] == "failed"
-	assert put_response.json["error"] == "product_not_found"
+	assert put_response.json["error"] == "not_found"
 
 
 def test_delete_product(client_products):
@@ -97,7 +97,7 @@ def test_delete_product_no_product_found(client_products):
 
 	delete_response = client_products.delete("/products/" + str(id))
 	assert delete_response.json["status"] == "failed"
-	assert delete_response.json["error"] == "product_not_found"
+	assert delete_response.json["error"] == "not_found"
 
 	get_response = client_products.get("/products")
 	assert len(get_response.json) == len(client_products.expected)

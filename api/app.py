@@ -25,18 +25,17 @@ import products, recipes, recipe_has_product, menus
 
 # db.create_all()
 while True:
-    try:
-        with app.app_context():
-            upgrade()
-            print("Upgrade sucessful", flush=True)
-        break
-    except OperationalError:
-        print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds", flush=True)
-        time.sleep(DB_CONNECTION_RETRY_WAIT_SECONDS)
-    except Exception as e:
-        print(e)
-        break
+	try:
+		with app.app_context():
+			upgrade()
+			print("Upgrade successful", flush=True)
+		break
+	except OperationalError:
+		print("Connection to Database failed, retrying in", DB_CONNECTION_RETRY_WAIT_SECONDS, "seconds", flush=True)
+		time.sleep(DB_CONNECTION_RETRY_WAIT_SECONDS)
+	except Exception as e:
+		raise e
 
 @app.route('/')
 def index():
-    return "Hello World!\n"
+	return "Hello World!\n"

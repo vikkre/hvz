@@ -3,6 +3,8 @@ from flask import request, jsonify
 from dataclasses import dataclass
 from sqlalchemy import exc
 
+import helper
+
 
 class Product(db.Model):
 	__tablename__ = "product"
@@ -20,6 +22,14 @@ class Product(db.Model):
 			'needed_amount': self.get_needed_amount()
 		}
 
+	def set_value(self, value_name, value):
+		if value_name == "name":
+			self.name = value
+		if value_name == "amount":
+			self.amount = value
+		if value_name == "required_amount":
+			self.required_amount = value
+
 	def get_needed_amount(self):
 		return max(self.required_amount - self.amount, 0)
 
@@ -33,106 +43,38 @@ class Product(db.Model):
 
 @dataclass
 class ProductResult:
-	product: Product = None
+	data: Product = None
 	status: str = None
 	error: str = None
 
-	def __init__(self, product=None):
-		self.product = product
+	def __init__(self, data=None):
+		self.data = data
 
 	def to_dict(self):
-		product = None if self.product is None else self.product.to_dict()
-		return {'product': product, 'status': self.status, 'error': self.error}
+		data = None if self.data is None else self.data.to_dict()
+		return {'product': data, 'status': self.status, 'error': self.error}
 
 
 @app.route('/products', methods=['GET'])
 def get_products():
-	return jsonify([p.to_dict() for p in Product.query.all()])
+	return helper.get_all(Product)
 
 
 @app.route('/products/<id>', methods=['GET'])
 def get_products_by_id(id):
-	product_result = ProductResult()
-
-	try:
-		product_result.product = Product.query.get(id)
-
-		if product_result.product is None:
-			product_result.status = "failed"
-			product_result.error = "product_not_found"
-		else:
-			product_result.status = 'ok'
-
-	except exc.DataError:
-		product_result.status = "failed"
-		product_result.error = "id_wrong_format"
-
-	return jsonify(product_result.to_dict())
+	return helper.get_by_id(id, Product, ProductResult)
 
 
 @app.route('/products', methods=['POST'])
 def post_products():
-	product_result = ProductResult(Product.from_dict(request.json))
-	db.session.add(product_result.product)
-
-	try:
-		db.session.commit()
-		product_result.status = 'ok'
-	except exc.IntegrityError as error:
-		db.session.rollback()
-		product_result.status = 'failed' 
-		product_result.error = "product_alredy_exits"
-
-	return jsonify(product_result.to_dict())
+	return helper.post(request.json, Product, ProductResult)
 
 
 @app.route('/products/<id>', methods=['PUT'])
 def put_products(id):
-	product_result = ProductResult()
-
-	try:
-		product_update = request.json
-		product_result.product = Product.query.get(id)
-
-		if product_result.product is None:
-			product_result.status = "failed"
-			product_result.error = "product_not_found"
-		else:
-			if "name" in product_update:
-				product_result.product.name = product_update["name"]
-			if "amount" in product_update:
-				product_result.product.amount = product_update["amount"]
-			if "required_amount" in product_update:
-				product_result.product.required_amount = product_update["required_amount"]
-
-			product_result.status = 'ok'
-			db.session.commit()
-
-	except exc.DataError:
-		product_result.status = "failed"
-		product_result.error = "id_wrong_format"
-
-	return jsonify(product_result.to_dict())
+	return helper.put_by_id(id, request.json, Product, ProductResult)
 
 
 @app.route('/products/<id>', methods=['DELETE'])
 def delete_products(id):
-	product_result = ProductResult()
-
-	try:
-		product_result.product = Product.query.get(id)
-
-		if product_result.product is None:
-			product_result.status = "failed"
-			product_result.error = "product_not_found"
-		else:
-			db.session.delete(product_result.product)
-
-			db.session.commit()
-			product_result.status = 'ok'
-
-	except exc.DataError:
-		product_result.status = "failed"
-		product_result.error = "id_wrong_format"
-
-	return jsonify(product_result.to_dict())
+	return helper.delete_by_id(id, Product, ProductResult)
