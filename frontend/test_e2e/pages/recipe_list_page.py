@@ -6,7 +6,7 @@ class RecipeRow:
         self.row_element = row_element
 
     @property
-    def product_name(self):
+    def recipe_name(self):
         return self.row_element.find_by_name("recipe_name")
 
     @property

@@ -14,6 +14,7 @@ class RecipeHasProduct(db.Model):
 	def to_dict(self):
 		return {
 			'product_id': self.product_id,
+			'product_name': self.product.name,
 			'recipe_id': self.recipe_id,
 			'amount': self.amount
 		}
