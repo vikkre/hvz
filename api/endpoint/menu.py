@@ -1,10 +1,10 @@
-from app import app, db
+from base import db, app
 from flask import request, jsonify
 from dataclasses import dataclass
 from sqlalchemy import exc, orm
 import datetime
 
-from recipes import Recipe
+from endpoint.recipe import Recipe
 
 
 menu_has_recipe = db.Table('menu_has_recipe', db.Model.metadata,

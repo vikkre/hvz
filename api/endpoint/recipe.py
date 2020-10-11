@@ -1,8 +1,9 @@
-from app import app, db
+from base import db, app
 from flask import request, jsonify
 from dataclasses import dataclass
 from sqlalchemy import exc
-from recipe_has_product import RecipeHasProduct
+
+from relation.recipe_has_product import RecipeHasProduct
 
 
 class Recipe(db.Model):
@@ -10,22 +11,57 @@ class Recipe(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(80), unique=True, nullable=False)
 	text = db.Column(db.Text, nullable=True)
-	recipe_has_product = db.relationship("RecipeHasProduct", cascade="all,delete")
+	products = db.relationship("RecipeHasProduct", cascade="all,save-update,delete-orphan", back_populates="recipe")
+
 
 	def to_dict(self):
 		return {
-			'id': self.id,
-			'name': self.name,
-			'text': self.text,
-			'required_products': [req_product.to_dict() for req_product in self.recipe_has_product]
+			"id": self.id,
+			"name": self.name,
+			"text": self.text,
+			"products": [{
+				"product_id": product.product_id,
+				"recipe_id": product.recipe_id,
+				"amount": product.amount,
+				"product_name": product.product.name
+			} for product in self.products]
 		}
 
+
 	@staticmethod
-	def from_dict(dict):
-		return Recipe(**dict)
+	def from_dict(data):
+		name = data["name"]
+		text = data["text"]
+		
+		return Recipe(name=name, text=text)
+
+
+	def set_relations(self, data):
+		required_products = data["required_products"]
+
+		for required_product_dict in required_products:
+			required_product_dict["recipe_id"] = self.id
+			required_product = RecipeHasProduct.from_dict(required_product_dict)
+			db.session.add(required_product)
+
+
+	def set_value(self, value_name, value):
+		pass
+		# if "name" in recipe_update:
+		# 	recipe_result.recipe.name = recipe_update["name"]
+		# if "text" in recipe_update:
+		# 	recipe_result.recipe.text = recipe_update["text"]
+		
+		# if "required_products" in recipe_update:
+		# 	for required_product in recipe_result.recipe.recipe_has_product:
+		# 		db.session.delete(required_product)
+		# 	for required_product_dict in recipe_update["required_products"]:
+		# 		required_product_dict["recipe_id"] = recipe_result.recipe.id
+		# 		required_product = RecipeHasProduct.from_dict(required_product_dict)
+		# 		db.session.add(required_product)
 
 	def __repr__(self):
-		return f'<Recipe {self.id}>'
+		return f"<Recipe {self.id}>"
 
 
 @dataclass
