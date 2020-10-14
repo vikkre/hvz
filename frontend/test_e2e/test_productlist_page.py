@@ -1,5 +1,6 @@
 from .database import Database
 
+
 def db_with_2_products():
     database = Database()
     database.truncate()
@@ -16,14 +17,14 @@ def test_contains_menu(product_list_page):
 def test_display_all_rows_of_products(product_list_page):
     db_with_2_products()
     p = product_list_page
-    p.visit()
+    p.visit(reload=True)
     assert len(p.product_rows) == 2
 
 
 def test_display_elements(product_list_page):
     db_with_2_products()
     p = product_list_page
-    p.visit(True)
+    p.visit(reload=True)
     assert p.product_rows.parts.product_name.text == "Burger"
     assert p.product_rows.parts.product_amount.value == "5"
     assert p.product_rows.parts.required_amount.text == "10"
