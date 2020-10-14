@@ -65,11 +65,10 @@ export async function insertRecipe(data) {
   }
 }
 
-export async function deleteRecipe(product_id) {
+export async function deleteRecipe(recipe_id) {
   try {
-    throw "not implemented";
     const dataJSON = JSON.stringify([{ id: recipe_id }]);
-    const result = await fetch(`${api_root}/recipes/${product_id}`, {
+    const result = await fetch(`${api_root}/recipes/${recipe_id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,

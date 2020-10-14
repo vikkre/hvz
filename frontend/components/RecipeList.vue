@@ -1,21 +1,23 @@
 <template>
   <div class="container">
-    <div class="modal" v-bind:class="{'is-active': showModal}">
+    <div class="modal" v-bind:class="{ 'is-active': showModal }">
       <div class="modal-background"></div>
       <div class="modal-content">
         <article class="message is-primary">
           <div class="message-header">
-            <p>{{modalHeader}}</p>
+            <p>{{ modalHeader }}</p>
           </div>
           <div class="message-body mx-6">
-            <p>{{modalText}}</p>
+            <p>{{ modalText }}</p>
             <div class="columns">
               <div class="column is-8"></div>
               <div class="column">
                 <a class="button" name="modal_ok" @click="modalOk">OK</a>
               </div>
               <div class="column">
-                <a class="button" name="modal_cancel" @click="modalCancel">Cancel</a>
+                <a class="button" name="modal_cancel" @click="modalCancel"
+                  >Cancel</a
+                >
               </div>
             </div>
           </div>
@@ -61,7 +63,7 @@
         <th></th>
       </thead>
       <tbody>
-        <tr v-for="r in this.recipes" v-bind:key="r.id">
+        <tr v-for="r in this.filteredRecipes" v-bind:key="r.id">
           <td name="recipe_name">{{ r.name }}</td>
           <td name="recipe_no_of_ingredients">
             {{ r.required_products.length }}
@@ -103,17 +105,33 @@ export default {
       showModal: false,
       modalText: "Do your really want to delete the product xyz?",
       modalHeader: "Confirm Deletion",
-      modalOkCallback: function() {}
+      modalOkCallback: function () {},
     };
   },
   methods: {
-    modalOk: function() {
+    modalOk: function () {
       this.modalOkCallback();
       this.showModal = false;
     },
-    modalCancel: function() {
+    modalCancel: function () {
       this.showModal = false;
+    },
+    deleteRecipe: async function(r) {
+      this.modalText = `Do your really want to delete the recipe "${r.name}"?`;
+      this.modalHeader = "Confirm Deletion";
+      this.showModal = true;
+      this.modalOkCallback = async function() {
+        await api.deleteRecipe(r.id);
+        this.recipes.splice(this.recipes.indexOf(r), 1);
+      };
     }
+  },
+  computed: {
+    filteredRecipes: function () {
+      return this.recipes.filter(
+        (p) => p.name.toUpperCase().indexOf(this.search.toUpperCase()) >= 0
+      );
+    },
   },
   created: async function () {
     this.isLoading = true;
