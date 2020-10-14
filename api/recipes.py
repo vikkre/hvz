@@ -158,6 +158,7 @@ def delete_recipes(id):
 
 			db.session.commit()
 			recipe_result.status = 'ok'
+			recipe_result.recipe = None
 
 	except exc.DataError:
 		recipe_result.status = "failed"
