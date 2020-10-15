@@ -14,7 +14,7 @@ person.init()
 town.init()
 
 
-class TestRestBasePerson(unittest.TestCase):
+class TestRestBase(unittest.TestCase):
 	def setUp(self):
 		app.config["TESTING"] = True
 		app.testing = True

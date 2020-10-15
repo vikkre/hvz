@@ -40,7 +40,7 @@ class Product(db.Model):
 
 
 	def __repr__(self):
-		return f"<Product {self.name}, amount={self.amount}, required_amount={self.required_amount}>"
+		return f"<Product {self.id}, name={self.name}, amount={self.amount}, required_amount={self.required_amount}>"
 
 
 	def get_needed_amount(self):
