@@ -1,6 +1,10 @@
+import sqlalchemy
+
 from base import db
 import helper
 from run_once import run_once
+
+import endpoint.menu as menu
 
 
 class Product(db.Model):
@@ -44,7 +48,19 @@ class Product(db.Model):
 
 
 	def get_needed_amount(self):
-		return max(self.required_amount - self.amount, 0)
+		menus = menu.Menu.query.order_by(sqlalchemy.desc("date")).limit(1)
+		try:
+			current_menu = menus[0]
+			need = 0
+
+			for recipe in current_menu.recipes:
+				for product in recipe.recipe.products:
+					if product.product_id == self.id:
+						need += product.amount
+
+			return max(self.required_amount - self.amount + need, 0)
+		except IndexError:
+			return max(self.required_amount - self.amount, 0)
 
 
 @run_once

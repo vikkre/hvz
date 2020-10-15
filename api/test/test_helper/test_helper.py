@@ -16,6 +16,7 @@ town.init()
 
 class TestRestBase(unittest.TestCase):
 	def setUp(self):
+		app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 		app.config["TESTING"] = True
 		app.testing = True
 
@@ -283,6 +284,7 @@ class TestRestBase(unittest.TestCase):
 	def test_delete_person(self):
 		expected = self.alice.to_dict()
 		id = self.alice.id
+		berlin_id = self.berlin.id
 
 		response = self.client.delete("/person/" + str(id))
 		result = response.json
@@ -292,7 +294,7 @@ class TestRestBase(unittest.TestCase):
 		db_data = Person.query.get(id)
 		self.assertIsNone(db_data)
 
-		berlin = Town.query.get(self.berlin.id)
+		berlin = Town.query.get(berlin_id)
 		self.assertEqual(1, len(berlin.persons))
 
 

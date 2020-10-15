@@ -6,13 +6,15 @@ import os, time
 
 app = flask.Flask(__name__)
 flask_cors.CORS(app)
+
+database = os.environ["DATABASE"]
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:admin@database/" + database
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 
 def init_db():
-	database = os.environ["DATABASE"]
-	app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:admin@database/" + database
-
 	migrate = flask_migrate.Migrate(app, db)
 
 	while True:

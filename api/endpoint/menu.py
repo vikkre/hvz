@@ -4,8 +4,8 @@ from run_once import run_once
 
 import datetime
 
-from endpoint.recipe import Recipe
-from relation.menu_has_recipe import MenuHasRecipe
+import endpoint.recipe as recipe
+import relation.menu_has_recipe as menu_has_recipe
 
 
 class Menu(db.Model):
@@ -48,11 +48,11 @@ class Menu(db.Model):
 
 
 	def insert_recipes(self, recipes):
-		for recipe in recipes:
-			recipe_entry = Recipe.query.get(recipe["id"])
+		for recipe_dict in recipes:
+			recipe_entry = recipe.Recipe.query.get(recipe_dict["id"])
 
-			menu_has_recipe = MenuHasRecipe(recipe=recipe_entry)
-			self.recipes.append(menu_has_recipe)
+			menu_has_recipe_instance = menu_has_recipe.MenuHasRecipe(recipe=recipe_entry)
+			self.recipes.append(menu_has_recipe_instance)
 
 
 @run_once

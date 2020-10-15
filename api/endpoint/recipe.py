@@ -2,8 +2,8 @@ from base import db
 import helper
 from run_once import run_once
 
-from endpoint.product import Product
-from relation.recipe_has_product import RecipeHasProduct
+import endpoint.product as product
+import relation.recipe_has_product as recipe_has_product
 
 
 class Recipe(db.Model):
@@ -56,12 +56,12 @@ class Recipe(db.Model):
 
 	
 	def insert_products(self, products):
-		for product in products:
-			product_entry = Product.query.get(product["id"])
-			amount = product["amount"]
+		for product_dict in products:
+			product_entry = product.Product.query.get(product_dict["id"])
+			amount = product_dict["amount"]
 
-			recipe_has_product = RecipeHasProduct(product=product_entry, amount=amount)
-			self.products.append(recipe_has_product)
+			recipe_has_product_instance = recipe_has_product.RecipeHasProduct(product=product_entry, amount=amount)
+			self.products.append(recipe_has_product_instance)
 
 
 @run_once

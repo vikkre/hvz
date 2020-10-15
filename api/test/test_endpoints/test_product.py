@@ -1,12 +1,20 @@
 import unittest
 
 from base import app, db
+
 from endpoint.product import Product
+from endpoint.recipe import Recipe
+from endpoint.menu import Menu
+from relation.recipe_has_product import RecipeHasProduct
+from relation.menu_has_recipe import MenuHasRecipe
+
 import endpoint_setup
+import datetime
 
 
 class TestProduct(unittest.TestCase):
 	def setUp(self):
+		app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 		app.config["TESTING"] = True
 		app.testing = True
 
@@ -16,6 +24,23 @@ class TestProduct(unittest.TestCase):
 
 		self.apple = Product(name="apple", amount=10, required_amount=5)
 		self.bread = Product(name="bread", amount=0, required_amount=2)
+
+		self.apple_bread = Recipe(name="Apple Bread", text="put apple on bread")
+		self.cut_apple = Recipe(name="Cut Apple", text="cut apple into slices")
+
+		self.this_week_date = datetime.datetime.now()
+		self.last_week_date = self.this_week_date - datetime.timedelta(days=7)
+
+		self.this_week = Menu(date=self.this_week_date)
+		self.last_week = Menu(date=self.last_week_date)
+
+		self.apple_bread.products.append(RecipeHasProduct(product=self.apple, amount=2))
+		self.apple_bread.products.append(RecipeHasProduct(product=self.bread, amount=3))
+		self.cut_apple.products.append(RecipeHasProduct(product=self.apple, amount=15))
+
+		self.this_week.recipes.append(MenuHasRecipe(recipe=self.apple_bread))
+		self.last_week.recipes.append(MenuHasRecipe(recipe=self.apple_bread))
+		self.last_week.recipes.append(MenuHasRecipe(recipe=self.cut_apple))
 
 		db.session.add(self.apple)
 		db.session.add(self.bread)
@@ -67,6 +92,18 @@ class TestProduct(unittest.TestCase):
 
 	
 	def test_get_needed_amount(self):
+		apple_needed_amount = self.apple.get_needed_amount()
+		self.assertEqual(0, apple_needed_amount)
+
+		bread_needed_amount = self.bread.get_needed_amount()
+		self.assertEqual(5, bread_needed_amount)
+
+
+	def test_get_needed_amount_no_menu(self):
+		db.session.delete(self.this_week)
+		db.session.delete(self.last_week)
+		db.session.commit
+
 		apple_needed_amount = self.apple.get_needed_amount()
 		self.assertEqual(0, apple_needed_amount)
 

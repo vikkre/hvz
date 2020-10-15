@@ -12,6 +12,7 @@ init()
 
 class TestRecipe(unittest.TestCase):
 	def setUp(self):
+		app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 		app.config["TESTING"] = True
 		app.testing = True
 

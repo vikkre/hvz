@@ -111,18 +111,22 @@ class RestBase:
 
 		table_result.data = self.table_class.query.get(id)
 
+		table_result.status = "ok"
+		result = table_result.to_dict()
+
 		if table_result.data is None:
 			table_result.status = "failed"
 			table_result.error = "not_found"
+			result = table_result.to_dict()
 		else:
 			base.db.session.delete(table_result.data)
 
 			try:
 				base.db.session.commit()
-				table_result.status = "ok"
 			except AssertionError:
 				base.db.session.rollback()
 				table_result.status = "failed"
 				table_result.error = "still_referenced"
+				result = table_result.to_dict()
 
-		return table_result.to_dict()
+		return result
