@@ -22,6 +22,7 @@ class TestRestBase(unittest.TestCase):
 
 		app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
 
+		db.drop_all()
 		db.create_all()
 
 		self.berlin = Town(name="Berlin", size=(3*1000*1000))
