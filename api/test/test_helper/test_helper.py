@@ -22,6 +22,7 @@ class TestRestBase(unittest.TestCase):
 
 		app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
 
+		db.drop_all()
 		db.create_all()
 
 		self.berlin = Town(name="Berlin", size=(3*1000*1000))
@@ -57,6 +58,9 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.get("/person")
 		result = response.json
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
 		self.assertCountEqual(expected, result)
 
 
@@ -67,6 +71,24 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.get("/town")
 		result = response.json
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertCountEqual(expected, result)
+
+
+	def test_get_all_persons_empty(self):
+		db.session.delete(self.alice)
+		db.session.delete(self.bob)
+		db.session.commit()
+
+		expected = []
+
+		response = self.client.get("/person")
+		result = response.json
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
 		self.assertCountEqual(expected, result)
 
 
@@ -75,17 +97,20 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.get("/person/" + str(self.alice.id))
 		result = response.json
+		status_code = response.status_code
 
-		self.assertEqual("ok", result["status"])
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 
 	def test_get_by_id_does_not_exist(self):
 		response = self.client.get("/town/10")
 		result = response.json
+		status_code = response.status_code
 
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("not_found", result["error"])
+		self.assertEqual(404, status_code)
+		self.assertEqual("Not Found", result["hvz_status"])
 		self.assertIsNone(result["data"])
 
 
@@ -97,7 +122,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.post("/town", json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(201, status_code)
+		self.assertEqual("Created", result["hvz_status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -125,7 +153,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.post("/person", json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(201, status_code)
+		self.assertEqual("Created", result["hvz_status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -144,7 +175,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.post("/person", json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(201, status_code)
+		self.assertEqual("Created", result["hvz_status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -156,8 +190,10 @@ class TestRestBase(unittest.TestCase):
 	def test_post_missing_parameter(self):
 		response = self.client.post("/person", json={})
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("missing_parameter", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(400, status_code)
+		self.assertEqual("Missing Parameter", result["hvz_status"])
 		self.assertIsNone(result["data"])
 
 
@@ -169,8 +205,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.post("/town", json=data)
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("alredy_exits", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(400, status_code)
+		self.assertEqual("Already Exists", result["hvz_status"])
 		self.assertIsNone(result["data"])
 
 
@@ -184,7 +222,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/town/" + str(self.berlin.id), json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -194,7 +235,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/person/" + str(self.alice.id), json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -207,7 +251,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/person/" + str(self.alice.id), json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -240,7 +287,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/person/" + str(self.alice.id), json=data)
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -251,8 +301,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/person/123", json=data)
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("not_found", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(404, status_code)
+		self.assertEqual("Not Found", result["hvz_status"])
 		self.assertIsNone(result["data"])
 
 	
@@ -263,8 +315,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.put("/person/" + str(self.alice.id), json=data)
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("already_exists", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(400, status_code)
+		self.assertEqual("Already Exists", result["hvz_status"])
 		self.assertIsNone(result["data"])
 
 
@@ -274,8 +328,11 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.delete("/town/" + str(id))
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertCountEqual("still_referenced", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(400, status_code)
+		self.assertEqual("In Use", result["hvz_status"])
+		self.assertCountEqual(expected, result["data"])
 
 		db_data = Town.query.get(id)
 		self.assertIsNotNone(db_data)
@@ -288,7 +345,10 @@ class TestRestBase(unittest.TestCase):
 
 		response = self.client.delete("/person/" + str(id))
 		result = response.json
-		self.assertEqual("ok", result["status"])
+		status_code = response.status_code
+
+		self.assertEqual(200, status_code)
+		self.assertEqual("OK", result["hvz_status"])
 		self.assertCountEqual(expected, result["data"])
 
 		db_data = Person.query.get(id)
@@ -301,6 +361,8 @@ class TestRestBase(unittest.TestCase):
 	def test_delete_not_found(self):
 		response = self.client.delete("/person/123")
 		result = response.json
-		self.assertEqual("failed", result["status"])
-		self.assertEqual("not_found", result["error"])
+		status_code = response.status_code
+
+		self.assertEqual(404, status_code)
+		self.assertEqual("Not Found", result["hvz_status"])
 		self.assertIsNone(result["data"])

@@ -5,6 +5,10 @@ import base
 
 
 # deprecated: Result.data_name
+# deprecated: Result.status
+# deprecated: Result.error
+
+# rename: Result.hvz_status to Result.status
 
 
 class Result:
@@ -15,9 +19,22 @@ class Result:
 		self.status = None
 		self.error = None
 
+		self.status_code = 200
+		self.hvz_status = "OK"
+
 	def to_dict(self):
 		data = None if self.data is None else self.data.to_dict()
-		return {self.data_name: data, "data": data, "status": self.status, "error": self.error}
+
+		return {
+			self.data_name: data,
+			"data": data,
+			"status": self.status,
+			"error": self.error,
+			"hvz_status": self.hvz_status
+		}
+
+	def get_response(self):
+		return self.to_dict(), self.status_code
 
 
 class RestBase:
@@ -35,7 +52,8 @@ class RestBase:
 
 
 	def get_all(self):
-		return flask.jsonify([data.to_dict() for data in self.table_class.query.all()])
+		result = [data.to_dict() for data in self.table_class.query.all()]
+		return flask.jsonify(result), 200
 
 
 	def get_by_id(self, id):
@@ -46,10 +64,13 @@ class RestBase:
 		if table_result.data is None:
 			table_result.status = "failed"
 			table_result.error = "not_found"
+
+			table_result.status_code = 404
+			table_result.hvz_status = "Not Found"
 		else:
 			table_result.status = "ok"
 
-		return table_result.to_dict()
+		return table_result.get_response()
 
 
 	def post(self):
@@ -57,6 +78,8 @@ class RestBase:
 
 		try:
 			table_result = Result(self.data_name)
+			table_result.status_code = 201
+			table_result.hvz_status = "Created"
 
 			table_entry = self.table_class.from_dict(data)
 			base.db.session.add(table_entry)
@@ -69,15 +92,23 @@ class RestBase:
 			base.db.session.rollback()
 			table_result.status = "failed"
 			table_result.error = "missing_parameter"
+
+			table_result.status_code = 400
+			table_result.hvz_status = "Missing Parameter"
+
 			table_result.data = None
 
 		except sqlalchemy.exc.IntegrityError:
 			base.db.session.rollback()
 			table_result.status = "failed"
 			table_result.error = "alredy_exits"
+
+			table_result.status_code = 400
+			table_result.hvz_status = "Already Exists"
+
 			table_result.data = None
 
-		return table_result.to_dict()
+		return table_result.get_response()
 
 
 	def put_by_id(self, id):
@@ -89,6 +120,9 @@ class RestBase:
 		if table_result.data is None:
 			table_result.status = "failed"
 			table_result.error = "not_found"
+
+			table_result.status_code = 404
+			table_result.hvz_status = "Not Found"
 		else:
 			try:
 				for value_name, value in data.items():
@@ -101,9 +135,13 @@ class RestBase:
 				base.db.session.rollback()
 				table_result.status = "failed"
 				table_result.error = "already_exists"
+
+				table_result.status_code = 400
+				table_result.hvz_status = "Already Exists"
+
 				table_result.data = None
 
-		return table_result.to_dict()
+		return table_result.get_response()
 
 
 	def delete_by_id(self, id):
@@ -112,12 +150,16 @@ class RestBase:
 		table_result.data = self.table_class.query.get(id)
 
 		table_result.status = "ok"
-		result = table_result.to_dict()
+		result = table_result.get_response()
 
 		if table_result.data is None:
 			table_result.status = "failed"
 			table_result.error = "not_found"
-			result = table_result.to_dict()
+
+			table_result.status_code = 404
+			table_result.hvz_status = "Not Found"
+
+			result = table_result.get_response()
 		else:
 			base.db.session.delete(table_result.data)
 
@@ -127,6 +169,10 @@ class RestBase:
 				base.db.session.rollback()
 				table_result.status = "failed"
 				table_result.error = "still_referenced"
-				result = table_result.to_dict()
+			
+				table_result.status_code = 400
+				table_result.hvz_status = "In Use"
+
+				result = table_result.get_response()
 
 		return result
