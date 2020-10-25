@@ -1,32 +1,37 @@
 let api_root = "/api";
 
+export function setRoot(root) {
+  api_root = root;
+}
 
-export async function loadProducts() {
+export async function loadRecipes() {
   try {
-    const ret = await fetch(`${api_root}/products`);
+    const ret = await fetch(`${api_root}/recipes`);
     return await ret.json();
   } catch (error) {
     console.log(error);
-    throw new Error("Could not load Products.");
+    throw new Error("Could not load Recipes.");
   }
 }
 
-
-export async function getProduct(id) {
+export async function getRecipe(id) {
   try {
-    const ret = await fetch(`${api_root}/products/${id}`);
-    return (await ret.json()).product;
+    const ret = await fetch(`${api_root}/recipes/${id}`);
+    const json = await ret.json();
+    return json.recipe;
   } catch (error) {
     console.log(error);
-    throw new Error("Could not load Products.");
+    throw new Error("Could not load Recipes.");
   }
 }
 
-
-export async function saveProduct(data) {
+export async function saveRecipe(data) {
   try {
+    data.required_products.forEach((rp) => {
+      delete rp.product_name;
+    });
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/products/${data.id}`, {
+    const result = await fetch(`${api_root}/recipes/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -36,19 +41,19 @@ export async function saveProduct(data) {
     }
     const json = await result.json();
     if (json.error) {
-      throw `Error when saving product<br>${json.error}`;
+      throw `Error when saving recipe<br>${json.error}`;
     }
     return json;
   } catch (error) {
     console.log(error);
-    throw new Error("Could not save Product.");
+    throw new Error("Could not save Recipe.");
   }
 }
 
-export async function insertProduct(data) {
+export async function insertRecipe(data) {
   try {
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/products`, {
+    const result = await fetch(`${api_root}/recipes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -58,19 +63,19 @@ export async function insertProduct(data) {
     }
     const json = await result.json();
     if (json.error) {
-      throw `Error when inserting product<br>${json.error}`;
+      throw `Error when inserting recipe<br>${json.error}`;
     }
     return json;
   } catch (error) {
     console.log(error);
-    throw new Error("Could not save Product.");
+    throw new Error("Could not save Recipe.");
   }
 }
 
-export async function deleteProduct(product_id) {
+export async function deleteRecipe(recipe_id) {
   try {
-    const dataJSON = JSON.stringify([{ id: product_id }]);
-    const result = await fetch(`${api_root}/products/${product_id}`, {
+    const dataJSON = JSON.stringify([{ id: recipe_id }]);
+    const result = await fetch(`${api_root}/recipes/${recipe_id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -78,7 +83,7 @@ export async function deleteProduct(product_id) {
       .then((result) => result.json())
       .then((data) => {
         if (data && data.error) {
-          throw `Error when deleting product<br>${data[0].error}`;
+          throw `Error when deleting recipe<br>${data[0].error}`;
         } else {
           return data;
         }
@@ -86,6 +91,6 @@ export async function deleteProduct(product_id) {
     return result;
   } catch (error) {
     console.log(error);
-    throw new Error("could not delete product");
+    throw new Error("could not delete recipe");
   }
 }
