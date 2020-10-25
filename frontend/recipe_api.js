@@ -14,14 +14,22 @@ export async function loadRecipes() {
   }
 }
 
-export async function getProducts() {
-  let ingredientArrays = data.map((r) => r.ingredients);
-  return [].concat(ingredientArrays);
+export async function getRecipe(id) {
+  try {
+    const ret = await fetch(`${api_root}/recipes/${id}`);
+    const json = await ret.json();
+    return json.recipe;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Could not load Recipes.");
+  }
 }
 
 export async function saveRecipe(data) {
   try {
-    throw "not implemented yet";
+    data.required_products.forEach((rp) => {
+      delete rp.product_name;
+    });
     const dataJSON = JSON.stringify(data);
     const result = await fetch(`${api_root}/recipes/${data.id}`, {
       method: "PUT",
@@ -44,7 +52,6 @@ export async function saveRecipe(data) {
 
 export async function insertRecipe(data) {
   try {
-    throw "not implemented";
     const dataJSON = JSON.stringify(data);
     const result = await fetch(`${api_root}/recipes`, {
       method: "POST",

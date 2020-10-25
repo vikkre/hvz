@@ -124,7 +124,19 @@ export default {
         await api.deleteRecipe(r.id);
         this.recipes.splice(this.recipes.indexOf(r), 1);
       };
-    }
+    }, 
+    editRecipe: function(recipe) {
+      this.$router.push({
+        name: "recipeEdit",
+        params: { recipe_id: recipe.id, origin: this.$router.currentRoute.fullPath }
+      });
+    },
+    newRecipe: function() {
+      this.$router.push({
+        name: "recipeEdit",
+        params: { recipe_id: undefined, origin: this.$router.currentRoute.fullPath }
+      });
+    },
   },
   computed: {
     filteredRecipes: function () {
