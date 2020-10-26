@@ -27,8 +27,8 @@ export async function getRecipe(id) {
 
 export async function saveRecipe(data) {
   try {
-    data.required_products.forEach((rp) => {
-      delete rp.product_name;
+    data.products.forEach((rp) => {
+      delete rp.name;
     });
     const dataJSON = JSON.stringify(data);
     const result = await fetch(`${api_root}/recipes/${data.id}`, {

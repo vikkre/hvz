@@ -38,15 +38,8 @@
           </div>
         </th>
       </thead>
-      <tr v-for="i in recipe.required_products" v-bind:key="i.id">
+      <tr v-for="i in recipe.products" v-bind:key="i.id">
         <td>
-          <!-- <input
-            class="input"
-            name="product_name"
-            v-model="i.product.name"
-            type="text"
-            placeholder="eg. Eggs"
-          /> -->
           <v-select
             :options="products"
             v-model="i.product"
@@ -108,17 +101,15 @@ import "vue-select/dist/vue-select.css";
 function fmap(rp) {
   return {
     amount: rp.amount,
-    recipe_id: rp.recipe_id,
-    product: { name: rp.product_name, id: rp.product_id },
+    product: { name: rp.name, id: rp.id },
   };
 }
 
 function funmap(rp) {
   return {
     amount: rp.amount,
-    recipe_id: rp.recipe_id,
-    product_name: rp.product.name,
-    product_id: rp.product.id,
+    id: rp.product.id,
+    name: rp.product.name,
   };
 }
 
@@ -136,16 +127,19 @@ export default {
   },
   methods: {
     doSave: async function () {
-      if (this.recipe_id) {
-        const r = this.recipe
-        for (const rp of r.required_products) {
-          if (!rp.product.id) {
-            const result = await product_api.insertProduct({name: rp.product.name, required_amount:0, amount: 0})
-            console.log(result)
-            rp.product.id = result.product.id
-          }
+      const r = JSON.parse(JSON.stringify(this.recipe));
+      for (const rp of r.products) {
+        if (!rp.product.id) {
+          const result = await product_api.insertProduct({
+            name: rp.product.name,
+            required_amount: 0,
+            amount: 0,
+          });
+          rp.product.id = result.product.id;
         }
-        r.required_products = r.required_products.map(funmap);
+      }
+      r.products = r.products.map(funmap);
+      if (r.id) {
         await api.saveRecipe(r);
       } else {
         await api.insertRecipe(r);
@@ -156,13 +150,12 @@ export default {
       this.$router.push(this.origin);
     },
     deleteIngredient: function (i) {
-      const index = this.recipe.required_products.indexOf(i);
-      this.recipe.required_products.splice(index, 1);
+      const index = this.recipe.products.indexOf(i);
+      this.recipe.products.splice(index, 1);
     },
     newIngredient: function () {
-      this.recipe.required_products.push({
+      this.recipe.products.push({
         amount: 0,
-        recipe_id: this.recipe.id,
         product: { id: null, name: null },
       });
     },
@@ -171,11 +164,11 @@ export default {
     this.products = await product_api.loadProducts();
     if (this.recipe_id) {
       const r = await api.getRecipe(this.recipe_id);
-      const rps = r.required_products.map(fmap);
-      r.required_products = rps;
+      const rps = r.products.map(fmap);
+      r.products = rps;
       this.recipe = r;
     } else {
-      this.recipe = { name: "", text: "", required_products: [] };
+      this.recipe = { name: "", text: "", products: [] };
     }
   },
   computed: {
@@ -191,5 +184,17 @@ export default {
 <style scoped>
 .action {
   cursor: pointer;
+}
+</style>
+
+<style> 
+.v-select {
+  background-color: white;
+}
+.vs__dropdown-toggle {
+    padding: 2px 5px 7px;
+}
+.vs__open-indicator {
+    cursor: pointer;
 }
 </style>

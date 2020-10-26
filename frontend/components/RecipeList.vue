@@ -66,7 +66,7 @@
         <tr v-for="r in this.filteredRecipes" v-bind:key="r.id">
           <td name="recipe_name">{{ r.name }}</td>
           <td name="recipe_no_of_ingredients">
-            {{ r.required_products.length }}
+            {{ r.products.length }}
           </td>
           <td>
             <span
