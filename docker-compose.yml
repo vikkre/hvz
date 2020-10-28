@@ -37,10 +37,21 @@ services:
     ports:
       - 5432:5432
 
-  selenium_grid:
-    image: selenium/standalone-firefox
-    container_name: hvz_test
-    depends_on:
-      - web
-    ports:
-      - 4444:4444
+  frontendbuild:
+    image: node:12
+    container_name: hvz_frontendbuild
+    volumes:
+      - ./frontend/web/:/app/web/
+      - ./frontend/dist/:/app/dist/
+      - ./frontend/:/frontend/
+    # https://stackoverflow.com/questions/30063907/using-docker-compose-how-to-execute-multiple-commands
+    command: 
+      - /bin/bash
+      - -c
+      - |
+        cp /frontend/package*.json /app
+        cd app
+        rm -rf ./dist/
+        npm install
+        npm run build 
+        echo "builddone" > ./dist/builddone
