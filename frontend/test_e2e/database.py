@@ -1,12 +1,14 @@
 from collections import namedtuple
 from warnings import resetwarnings
 from sqlalchemy import create_engine, MetaData
+import os
 
 
 class Database():
     def __init__(self) -> None:
+        db_server = os.getenv("DB_HOST", "localhost")
         self.eng = create_engine(
-            'postgresql://admin:admin@localhost/hvz_production')
+            f'postgresql://admin:admin@{db_server}/hvz_production')
         self.meta = MetaData()
         self.meta.reflect(self.eng)
         self.table_names = ['recipe_has_product', 'menu_has_recipe', 'menu',

@@ -1,19 +1,41 @@
 version: '3'
 services:
   
-  selenium:
-    image: selenium/standalone-chrome
-    container_name: hvz_selenium
-    shm_size: '2gb' 
+  database:
+    ports:
+      - 5432:5432
+
+  selenium_grid:
+    image: selenium/standalone-firefox
+    container_name: hvz_test
     depends_on:
       - web
+    ports:
+      - 4444:4444
 
   e2etests:
-    build:
-      context: ./config/e2etests
+    image: python:3.8-alpine
     container_name: hvz_e2etests
+    environment: 
+      DB_HOST: database
+      SELENIUM_HOST: hvz_test
+      WEB_HOST: hvz_web
     depends_on:
-      - selenium
+      - selenium_grid
     volumes:
-      - ./e2etests/:/code/
+      - ./frontend/test_e2e/:/code/test_e2e/
+      - ./frontend/:/frontend/
+    command:       
+      - /bin/sh
+      - -c
+      - |
+        cp /frontend/pytest.ini /code
+        cp /frontend/requirements.txt /code
+        cd code
+        apk add --no-cache gcc musl-dev linux-headers postgresql-dev 
+        pip install -r requirements.txt
+        python3 /code/test_e2e/waitfor_frontend_build.py
+        pytest -v | tee /frontend/pytest-results.txt
 
+    
+    

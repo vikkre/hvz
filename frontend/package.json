@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "parcel watch index.html"
+    "build": "parcel build ./web/index.html",
+    "watch": "parcel watch ./web/index.html"
   },
   "keywords": [],
   "author": "",

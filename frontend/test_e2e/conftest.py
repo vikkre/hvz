@@ -1,8 +1,10 @@
-from test_e2e.pages.producteditpage import ProductEditPage
+import os
+
 import pytest
 from splinter import Browser
 
-from .pages import StartPage, ProductListPage, ShoppingListPage, RecipeListPage
+from .pages import (ProductEditPage, ProductListPage, RecipeListPage,
+                    ShoppingListPage, StartPage)
 
 
 @pytest.fixture(scope="session")
@@ -12,7 +14,9 @@ def base_url():
 
 @pytest.fixture(scope="session")
 def browser():
-    with Browser(driver_name="remote") as b:
+    selenium_host = os.getenv("SELENIUM_HOST", "localhost")
+    selenium_url = f"http://{selenium_host}:4444/wd/hub"
+    with Browser(driver_name="remote", command_executor=selenium_url) as b:
         b.driver.set_window_size(360, 800)
         yield b
 

@@ -6,8 +6,7 @@
 // Just uncomment the following block to see the result.
 
 // 1. Import the initial variables
-@import "../node_modules/bulma/sass/utilities/initial-variables";
-// https://cdn.jsdelivr.net/npm/open-fonts@1.1.1/fonts/inter.min.css
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
 @import url("https://cdn.jsdelivr.net/npm/open-fonts@1.1.1/fonts/inter.min.css");
 
 // 2. Set your own initial variables
@@ -36,4 +35,4 @@ $light: $color-2;
 /*
 */
 
-@import "../node_modules/bulma/bulma";
+@import "../../node_modules/bulma/bulma";
