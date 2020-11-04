@@ -45,15 +45,16 @@
             v-model="i.product"
             taggable
             label="name"
+            name="product_name"
           ></v-select>
         </td>
         <td>
           <input
             class="input"
-            name="amount"
             v-model="i.amount"
             type="number"
             placeholder="eg. 5"
+            name="product_amount"
           />
         </td>
         <td>
