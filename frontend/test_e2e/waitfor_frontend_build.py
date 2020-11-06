@@ -7,9 +7,9 @@ import logging
 
 web_host = os.getenv("WEB_HOST", "localhost")
 log_level = getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper())
-max_count = 10
+max_count = 20
 url = f'http://{web_host}/builddone'
-sleep_seconds = 2
+sleep_seconds = 5
 
 logging.basicConfig(format='%(name)s : %(message)s', level=log_level)
 logger = logging.getLogger("waitfor_frontend_build")

@@ -145,10 +145,10 @@ export default {
       } else {
         await api.insertRecipe(r);
       }
-      this.$router.push(this.origin);
+      this.$router.push("/RecipeList");
     },
     doCancel: function () {
-      this.$router.push(this.origin);
+      this.$router.push("/RecipeList");
     },
     deleteIngredient: function (i) {
       const index = this.recipe.products.indexOf(i);
