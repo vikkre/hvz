@@ -26,6 +26,7 @@
         <router-link class="navbar-item" to="/ProductList">Product List</router-link>
         <router-link class="navbar-item" to="/ShoppingList">Shopping List</router-link>
         <router-link class="navbar-item" to="/RecipeList">Recipe List</router-link>
+        <router-link class="navbar-item" to="/MenuList">Menu List</router-link>
       </div>
 
       <div class="navbar-end">
