@@ -26,7 +26,7 @@ Always returns a JSON-Object, except when get all was called.
 |     400     | In Use            | Could not delete resource, because resource is still referenced by another resource |
 |     404     | Not Found         | Resource could not be found                                                         |
 
-## Issue Managemenmt
+## Issue Management
 
 ### Issue work flow
 
