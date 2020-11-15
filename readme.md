@@ -26,17 +26,14 @@ Always returns a JSON-Object, except when get all was called.
 |     400     | In Use            | Could not delete resource, because resource is still referenced by another resource |
 |     404     | Not Found         | Resource could not be found                                                         |
 
-## Release 0.2.0
+## Issue Managemenmt
 
-### Backend
+### Issue work flow
 
-- Column required amount
-- Calculate needed amount
-
-### Frontend
-
-- Edit name on click
-- save change on leave and close window (name, amount, needed amount)
-- icon for delete product
-- shopping list view
-- improve mobile view
+- Create Issue
+- Assign Issue
+- Create Branch for Issue FROM DEVELOPMENT ([IssueNumber]-[IssueTitle (lowerase, hyphen instead of space)])
+- Work on branch
+- Create Pull request from branch TO DEVELOPMENT
+- Merge and delete Branch
+- Close Issue with message
