@@ -11,7 +11,7 @@ def test_contains_menu(product_list_page):
     p = product_list_page
     p.visit()
     assert p.menu_items != None
-    assert len(p.menu_items) == 3
+    assert len(p.menu_items) == 4
 
 
 def test_display_all_rows_of_products(product_list_page):

@@ -11,7 +11,7 @@ def db_with_2_products():
 def test_contains_menu(product_list_page):
     product_list_page.visit()
     assert product_list_page.menu_items != None
-    assert len(product_list_page.menu_items) == 3
+    assert len(product_list_page.menu_items) == 4
 
 
 def test_new_product_switches_to_empty_product_edit_page( product_list_page, product_edit_page):
