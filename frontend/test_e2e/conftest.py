@@ -3,7 +3,7 @@ import os
 import pytest
 from splinter import Browser
 
-from .pages import (ProductEditPage, ProductListPage, RecipeListPage,
+from .pages import (ProductEditPage, ProductListPage, RecipeListPage, RecipeEditPage,
                     ShoppingListPage, StartPage)
 
 
@@ -44,3 +44,8 @@ def shopping_list_page(browser, base_url):
 @pytest.fixture(scope="session")
 def recipe_list_page(browser, base_url):
     return RecipeListPage(browser, base_url)
+
+
+@pytest.fixture(scope="session")
+def recipe_edit_page(browser, base_url):
+    return RecipeEditPage(browser, base_url)

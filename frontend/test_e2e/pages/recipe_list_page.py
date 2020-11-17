@@ -40,8 +40,8 @@ class RecipeListPage(BasePage):
         return self.browser.find_by_name("search_input")
 
     @property
-    def new_product(self):
-        return self.browser.find_by_name("new_product")
+    def new_recipe(self):
+        return self.browser.find_by_name("new_recipe")
 
     @property
     def modal(self):

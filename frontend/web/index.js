@@ -9,9 +9,15 @@ import ProductList from "./components/ProductList.vue";
 import ProductEdit from "./components/ProductEdit.vue";
 
 import ShoppingList from "./components/ShoppingList.vue";
+
 import RecipeList from "./components/RecipeList.vue";
 import RecipeEdit from "./components/RecipeEdit.vue";
+
+import MenuList from "./components/MenuList.vue";
+import MenuEdit from "./components/MenuEdit.vue";
+
 import SplashScreen from "./components/SplashScreen.vue";
+
 import vSelect from 'vue-select'
 
 Vue.component('v-select', vSelect)
@@ -34,6 +40,15 @@ const routes = [
     name: "recipeEdit",
     props: true,
   },
+
+  { path: "/MenuList", component: MenuList, name: "Menus" },
+  {
+    path: "/MenuEdit",
+    component: MenuEdit,
+    name: "menuEdit",
+    props: true,
+  },
+
   { path: "*", component: SplashScreen },
 ];
 

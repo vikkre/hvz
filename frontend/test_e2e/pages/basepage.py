@@ -1,3 +1,8 @@
+from datetime import datetime
+import re
+import os
+
+
 class BasePage():
     rel_path = ""
 
@@ -18,6 +23,12 @@ class BasePage():
 
     def reload(self):
         self.browser.reload()
+
+    def take_screenshot(self):
+        tag = re.sub(r'[^\w\s]{1,}', '-',
+                     f'{datetime.now()} {self.current_url}')
+        filepath = os.path.join(os.path.abspath('.'), fr'screenshots\screen-{tag}.png')
+        self.browser.screenshot(filepath, full=True)
 
     @property
     def title(self):
@@ -46,3 +57,7 @@ class BasePage():
     @property
     def current_url(self):
         return self.browser.url
+
+    def assert_is_current(self):
+        assert self.current_url.endswith(
+            self.rel_path), f"Expected to end with {self.rel_path} but is {self.current_url}"
