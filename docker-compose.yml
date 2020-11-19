@@ -1,20 +1,21 @@
 version: "3"
 services:
   web:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: ./config/web-server/Dockerfile
+
     container_name: hvz_web
     depends_on:
       - api
-    volumes:
-      - ./config/web-server/production-nginx.conf:/etc/nginx/nginx.conf
-      - ./frontend/dist/:/www/
     ports:
       - 80:80
       - 443:443
 
   api:
     build:
-      context: ./config/api
+      context: .
+      dockerfile: ./config/api/Dockerfile
       args:
         SPECIAL_REQUIREMENTS: "production-requirements.txt"
 
@@ -22,8 +23,6 @@ services:
     entrypoint: ["uwsgi", "--ini", "app.ini"]
     depends_on:
       - database
-    volumes:
-      - ./api/:/code/
     environment:
       DATABASE: hvz_production
 
@@ -34,24 +33,3 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: hvz_production
-    ports:
-      - 5432:5432
-
-  frontendbuild:
-    image: node:12
-    container_name: hvz_frontendbuild
-    volumes:
-      - ./frontend/web/:/app/web/
-      - ./frontend/dist/:/app/dist/
-      - ./frontend/:/frontend/
-    # https://stackoverflow.com/questions/30063907/using-docker-compose-how-to-execute-multiple-commands
-    command: 
-      - /bin/bash
-      - -c
-      - |
-        cp /frontend/package*.json /app
-        cd app
-        rm -rf ./dist/
-        npm install
-        npm run build 
-        echo "builddone" > ./dist/builddone
