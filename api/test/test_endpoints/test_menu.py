@@ -55,6 +55,7 @@ class TestMenu(unittest.TestCase):
 		expected = {
 			"id": self.this_week.id,
 			"date": self.this_week_date,
+			"posix_time": int(self.this_week_date.timestamp()),
 			"recipes": [
 				{
 					"id": self.apple_bread.id,

@@ -19,6 +19,7 @@ class Menu(db.Model):
 		return {
 			"id": self.id,
 			"date": self.date,
+			"posix_time": int(self.date.timestamp()),
 			"recipes": [{
 				"id": recipe.recipe_id,
 				"name": recipe.recipe.name
