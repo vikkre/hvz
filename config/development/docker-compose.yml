@@ -15,7 +15,8 @@ services:
 
   api:
     build:
-      context: ../api
+      context: ../..
+      dockerfile: config/api/Dockerfile
       args:
         SPECIAL_REQUIREMENTS: "development-requirements.txt"
 
