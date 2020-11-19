@@ -29,6 +29,8 @@ services:
   database:
     image: postgres:latest
     container_name: hvz_db
+    volumes:
+      - ./hvz-data/:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin

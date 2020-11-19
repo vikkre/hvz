@@ -13,3 +13,5 @@ frontend/dist
 frontend/.cache
 frontend/node_modules
 frontend/pytest-results.txt
+
+hvz-data
