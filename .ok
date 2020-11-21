@@ -1,2 +1,14 @@
-cd frontend
-docker-compose up -d 
+code .
+pushd frontend 
+# Entferne alle docker container, egal ob sie laufen oder auch nicht
+docker ps -aq | % {docker rm $_ -f}
+# Befehle um den End-To-End-Test einmal durchzuführen
+docker-compose -f docker-compose.yml -f docker-compose-e2etests.yml build
+docker-compose -f docker-compose.yml -f docker-compose-e2etests.yml up
+# Befehle um die Umgebung für die Frontend-Entwicklung breit zu stellen
+docker-compose -f docker-compose.yml -f docker-compose-frontend-dev.yml build
+docker-compose -f docker-compose.yml -f docker-compose-frontend-dev.yml up
+pushd frontend && ./venv/scripts/activate && code . && popd
+pushd frontend && ./venv/scripts/activate && watchmedo shell-command -c 'npm run build && pytest -v --lf' -W -D -R ./test_e2e/ ./web/ && popd
+
+

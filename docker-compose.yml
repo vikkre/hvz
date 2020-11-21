@@ -1,10 +1,10 @@
 version: "3"
 services:
+
   web:
     build:
       context: .
       dockerfile: ./config/web-server/Dockerfile
-
     container_name: hvz_web
     depends_on:
       - api

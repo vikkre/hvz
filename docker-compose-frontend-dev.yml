@@ -1,0 +1,21 @@
+version: '3'
+services:
+  
+  web:
+    volumes:
+      - ./frontend/dist:/www
+
+  database:
+    ports:
+      - 5432:5432
+    volumes:
+      - ./hvz-data-test/:/var/lib/postgresql/data/
+
+  selenium:
+    image: selenium/standalone-firefox
+    container_name: hvz_selenium_standalone_firefox
+    depends_on:
+      - web
+    ports:
+      - 4444:4444
+

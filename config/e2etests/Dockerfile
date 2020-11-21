@@ -1,8 +1,12 @@
-FROM python:3.7-alpine
+FROM python:3.8-alpine
 
 WORKDIR /code
 
-RUN pip install pytest pytest-selenium pytest-variables
+RUN apk add --no-cache \
+  gcc \
+  linux-headers \
+  musl-dev \ 
+  postgresql-dev
 
-
-CMD ["pytest"]
+COPY ./frontend/requirements.txt /code
+RUN pip3 install -r requirements.txt
