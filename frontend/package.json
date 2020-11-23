@@ -4,7 +4,7 @@
   "description": "Frontend for hvz",
   "main": "index.js",
   "scripts": {
-    "build": "parcel build ./web/index.html",
+    "build": "parcel build ./web/index.html --no-minify",
     "watch": "parcel watch ./web/index.html"
   },
   "keywords": [],
@@ -24,6 +24,7 @@
     "cor": "0.0.0",
     "core-js": "^3.6.5",
     "install": "^0.13.0",
+    "moment": "^2.29.1",
     "npm": "^6.14.8",
     "pro": "^0.3.0",
     "vue": "^2.6.11",

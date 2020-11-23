@@ -1,0 +1,4 @@
+# Befehle für die Frontend-Entwicklung 
+watchmedo shell-command -c 'npm run build && pytest -v --lf' -W -D -R ./test_e2e/ ./web/ 
+
+

@@ -20,6 +20,8 @@ import SplashScreen from "./components/SplashScreen.vue";
 
 import vSelect from 'vue-select'
 
+import moment from 'moment'
+
 Vue.component('v-select', vSelect)
 
 Vue.use(VueRouter);
@@ -61,3 +63,9 @@ new Vue({
   router,
   render: (h) => h(App),
 }).$mount("#app");
+
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment.unix(String(value)).format('DD.MM.YYYY HH:mm')
+  }
+}) 

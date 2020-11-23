@@ -64,7 +64,7 @@
       </thead>
       <tbody>
         <tr v-for="m in this.filteredMenus" v-bind:key="m.id">
-          <td name="menu_date">{{ m.date }}</td>
+          <td name="menu_date">{{ m.posix_time | formatDate }}</td>
           <td name="no_of_recipes">
             {{ m.recipes.length }}
           </td>
