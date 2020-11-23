@@ -4,6 +4,8 @@ services:
   database:
     ports:
       - 5432:5432
+    volumes:
+      - ./hvz-data-test/:/var/lib/postgresql/data/
 
   selenium_grid:
     image: selenium/standalone-firefox
@@ -14,13 +16,18 @@ services:
       - 4444:4444
 
   e2etests:
-    image: python:3.8-alpine
+    build:
+      context: .
+      dockerfile: ./config/e2etests/Dockerfile
     container_name: hvz_e2etests
     environment: 
       DB_HOST: database
       SELENIUM_HOST: hvz_test
       WEB_HOST: hvz_web
     depends_on:
+      - database
+      - api
+      - web
       - selenium_grid
     volumes:
       - ./frontend/test_e2e/:/code/test_e2e/
@@ -30,12 +37,8 @@ services:
       - -c
       - |
         cp /frontend/pytest.ini /code
-        cp /frontend/requirements.txt /code
         cd code
-        apk add --no-cache gcc musl-dev linux-headers postgresql-dev 
-        pip install -r requirements.txt
-        python3 /code/test_e2e/waitfor_frontend_build.py
-        pytest -v | tee /frontend/pytest-results.txt
+        pytest -v | tee /frontend/pytest-results-$$(date +%Y-%m-%d-%H-%M-%S).txt
 
     
     

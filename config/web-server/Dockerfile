@@ -2,12 +2,12 @@ FROM node:12
 
 WORKDIR /app
 
-COPY ./frontend/web/ /app/web
+# First do the steps that might be the same in most builds, so we can profit from caching as much as possible
 COPY ./frontend/package*.json /app/
-
 RUN npm install
-RUN npm run build
 
+COPY ./frontend/web/ /app/web
+RUN npm run build
 
 FROM nginx:latest
 
