@@ -95,6 +95,7 @@
 
 <script>
 import * as api from "../menu_api.js";
+import moment from 'moment'
 export default {
   name: "MenuList",
   data: function () {
@@ -140,9 +141,13 @@ export default {
   },
   computed: {
     filteredMenus: function () {
+      function formatDate(posix_time) {
+        return moment.unix(String(posix_time)).format('DD.MM.YYYY HH:mm')
+      }
       return this.menus.filter(
-        (m) => m.date.toUpperCase().indexOf(this.search.toUpperCase()) >= 0
-      );
+        (m) => formatDate(m.posix_time).toUpperCase().indexOf(this.search.toUpperCase()) >= 0
+      )
+      .sort((a,b)=> -1 * ( a.posix_time - b.posix_time ));
     },
   },
   created: async function () {
