@@ -16,7 +16,7 @@ def test_add_new_recipe_from_list(recipe_list_page, recipe_edit_page):
     p.new_recipe.click()
     p.browser.is_element_present_by_text("Save", wait_time=5)
     recipe_edit_page.assert_is_current()
-
+    
 def test_enter_new_recipe_and_save(recipe_edit_page, recipe_list_page):
     p = recipe_edit_page
     p.visit(reload=True)

@@ -6,7 +6,7 @@
         <input
           class="input"
           name="menu_date"
-          v-model="menu.date"
+          v-bind:value= "menu.posix_time | formatDate"
           type="text"
           readonly="true"
           placeholder="set by system on save"
