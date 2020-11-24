@@ -100,7 +100,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -110,7 +110,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(404, status_code)
-		self.assertEqual("Not Found", result["hvz_status"])
+		self.assertEqual("Not Found", result["status"])
 		self.assertIsNone(result["data"])
 
 
@@ -125,7 +125,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(201, status_code)
-		self.assertEqual("Created", result["hvz_status"])
+		self.assertEqual("Created", result["status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -156,7 +156,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(201, status_code)
-		self.assertEqual("Created", result["hvz_status"])
+		self.assertEqual("Created", result["status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -178,7 +178,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(201, status_code)
-		self.assertEqual("Created", result["hvz_status"])
+		self.assertEqual("Created", result["status"])
 
 		result = result["data"]
 		data["id"] = result["id"]
@@ -193,7 +193,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(400, status_code)
-		self.assertEqual("Missing Parameter", result["hvz_status"])
+		self.assertEqual("Missing Parameter", result["status"])
 		self.assertIsNone(result["data"])
 
 
@@ -208,7 +208,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(400, status_code)
-		self.assertEqual("Already Exists", result["hvz_status"])
+		self.assertEqual("Already Exists", result["status"])
 		self.assertIsNone(result["data"])
 
 
@@ -225,7 +225,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -238,7 +238,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -254,7 +254,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -290,7 +290,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 
@@ -304,7 +304,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(404, status_code)
-		self.assertEqual("Not Found", result["hvz_status"])
+		self.assertEqual("Not Found", result["status"])
 		self.assertIsNone(result["data"])
 
 	
@@ -318,7 +318,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(400, status_code)
-		self.assertEqual("Already Exists", result["hvz_status"])
+		self.assertEqual("Already Exists", result["status"])
 		self.assertIsNone(result["data"])
 
 
@@ -331,7 +331,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(400, status_code)
-		self.assertEqual("In Use", result["hvz_status"])
+		self.assertEqual("In Use", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 		db_data = Town.query.get(id)
@@ -348,7 +348,7 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(200, status_code)
-		self.assertEqual("OK", result["hvz_status"])
+		self.assertEqual("OK", result["status"])
 		self.assertCountEqual(expected, result["data"])
 
 		db_data = Person.query.get(id)
@@ -364,5 +364,5 @@ class TestRestBase(unittest.TestCase):
 		status_code = response.status_code
 
 		self.assertEqual(404, status_code)
-		self.assertEqual("Not Found", result["hvz_status"])
+		self.assertEqual("Not Found", result["status"])
 		self.assertIsNone(result["data"])

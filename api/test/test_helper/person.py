@@ -72,4 +72,4 @@ class Person(db.Model):
 
 @run_once
 def init():
-	helper.RestBase("/person", Person, data_name="person")
+	helper.RestBase("/person", Person)

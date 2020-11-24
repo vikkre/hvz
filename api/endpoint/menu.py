@@ -58,6 +58,4 @@ class Menu(db.Model):
 
 @run_once
 def init():
-	# deprecated: /menus
-	helper.RestBase("/menus", Menu, data_name="menu")
-	helper.RestBase("/menu", Menu, data_name="menu")
+	helper.RestBase("/menu", Menu)
