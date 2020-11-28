@@ -3,24 +3,15 @@ services:
 
   test_api:
     build:
-      context: ../api
+      context: ../..
+      dockerfile: config/api/Dockerfile
       args:
         SPECIAL_REQUIREMENTS: "test-requirements.txt"
 
     entrypoint: ["pytest", "-v"]
     container_name: hvz_test_api
-    depends_on:
-      - database
     volumes:
       - ../../api/:/code/
     environment:
       FLASK_ENV: development
       DATABASE: hvz_test
-
-  database:
-    image: postgres:latest
-    container_name: hvz_test_db
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: hvz_test
