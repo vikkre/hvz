@@ -46,4 +46,4 @@ class Town(db.Model):
 
 @run_once
 def init():
-	helper.RestBase("/town", Town, data_name="town")
+	helper.RestBase("/town", Town)

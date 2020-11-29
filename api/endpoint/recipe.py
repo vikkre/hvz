@@ -66,6 +66,4 @@ class Recipe(db.Model):
 
 @run_once
 def init():
-	# deprecated: /recipes
-	helper.RestBase("/recipes", Recipe, data_name="recipe")
-	helper.RestBase("/recipe", Recipe, data_name="recipe")
+	helper.RestBase("/recipe", Recipe)
