@@ -1,9 +1,8 @@
 let api_root = "/api";
 
-
 export async function loadProducts() {
   try {
-    const ret = await fetch(`${api_root}/products`);
+    const ret = await fetch(`${api_root}/product`);
     return await ret.json();
   } catch (error) {
     console.log(error);
@@ -11,22 +10,20 @@ export async function loadProducts() {
   }
 }
 
-
 export async function getProduct(id) {
   try {
-    const ret = await fetch(`${api_root}/products/${id}`);
-    return (await ret.json()).product;
+    const ret = await fetch(`${api_root}/product/${id}`);
+    return (await ret.json()).data;
   } catch (error) {
     console.log(error);
     throw new Error("Could not load Products.");
   }
 }
 
-
 export async function saveProduct(data) {
   try {
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/products/${data.id}`, {
+    const result = await fetch(`${api_root}/product/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -48,7 +45,7 @@ export async function saveProduct(data) {
 export async function insertProduct(data) {
   try {
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/products`, {
+    const result = await fetch(`${api_root}/product`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -70,7 +67,7 @@ export async function insertProduct(data) {
 export async function deleteProduct(product_id) {
   try {
     const dataJSON = JSON.stringify([{ id: product_id }]);
-    const result = await fetch(`${api_root}/products/${product_id}`, {
+    const result = await fetch(`${api_root}/product/${product_id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,

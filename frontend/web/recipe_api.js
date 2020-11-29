@@ -6,7 +6,7 @@ export function setRoot(root) {
 
 export async function loadRecipes() {
   try {
-    const ret = await fetch(`${api_root}/recipes`);
+    const ret = await fetch(`${api_root}/recipe`);
     return await ret.json();
   } catch (error) {
     console.log(error);
@@ -16,9 +16,9 @@ export async function loadRecipes() {
 
 export async function getRecipe(id) {
   try {
-    const ret = await fetch(`${api_root}/recipes/${id}`);
+    const ret = await fetch(`${api_root}/recipe/${id}`);
     const json = await ret.json();
-    return json.recipe;
+    return json.data;
   } catch (error) {
     console.log(error);
     throw new Error("Could not load Recipes.");
@@ -31,7 +31,7 @@ export async function saveRecipe(data) {
       delete rp.name;
     });
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/recipes/${data.id}`, {
+    const result = await fetch(`${api_root}/recipe/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -53,7 +53,7 @@ export async function saveRecipe(data) {
 export async function insertRecipe(data) {
   try {
     const dataJSON = JSON.stringify(data);
-    const result = await fetch(`${api_root}/recipes`, {
+    const result = await fetch(`${api_root}/recipe`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
@@ -75,7 +75,7 @@ export async function insertRecipe(data) {
 export async function deleteRecipe(recipe_id) {
   try {
     const dataJSON = JSON.stringify([{ id: recipe_id }]);
-    const result = await fetch(`${api_root}/recipes/${recipe_id}`, {
+    const result = await fetch(`${api_root}/recipe/${recipe_id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: dataJSON,
