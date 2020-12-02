@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-WORKDIR /code
+WORKDIR /frontend
 
 RUN apk add --no-cache \
   gcc \
@@ -8,5 +8,7 @@ RUN apk add --no-cache \
   musl-dev \ 
   postgresql-dev
 
-COPY ./frontend/requirements.txt /code
+COPY ./frontend /frontend
 RUN pip3 install -r requirements.txt
+
+CMD pytest -v | tee /frontend/pytest-results-$(date +%Y-%m-%d-%H-%M-%S).txt

@@ -24,10 +24,10 @@ def db():
             break
         except Exception as e:
             retry_count += 1
-            if (retry_count > 5):
+            if (retry_count > 10):
                 raise e
             else:
-                time.sleep(2 ** retry_count)
+                time.sleep(2 * retry_count)
     yield d
 
 

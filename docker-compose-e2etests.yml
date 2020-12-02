@@ -29,16 +29,6 @@ services:
       - api
       - web
       - selenium_grid
-    volumes:
-      - ./frontend/test_e2e/:/code/test_e2e/
-      - ./frontend/:/frontend/
-    command:       
-      - /bin/sh
-      - -c
-      - |
-        cp /frontend/pytest.ini /code
-        cd code
-        pytest -v | tee /frontend/pytest-results-$$(date +%Y-%m-%d-%H-%M-%S).txt
 
     
     
