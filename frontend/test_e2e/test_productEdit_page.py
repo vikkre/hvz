@@ -1,5 +1,6 @@
-import pytest
+#TODO: Use db fixture!
 from .database import Database
+
 
 def db_with_2_products():
     database = Database()

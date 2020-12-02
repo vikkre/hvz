@@ -1,15 +1,34 @@
 import os
+import time
 
 import pytest
 from splinter import Browser
 
-from .pages import (ProductEditPage, ProductListPage, RecipeListPage, RecipeEditPage,
-                    ShoppingListPage, StartPage)
+from .database import Database
+from .pages import (ProductEditPage, ProductListPage, RecipeEditPage,
+                    RecipeListPage, ShoppingListPage, StartPage)
 
 
 @pytest.fixture(scope="session")
 def base_url():
     return "http://hvz_web"
+
+
+@pytest.fixture(scope="session")
+def db():
+    retry_count = 0
+    d = None
+    while True:
+        try:
+            d = Database()
+            break
+        except Exception as e:
+            retry_count += 1
+            if (retry_count > 5):
+                raise e
+            else:
+                time.sleep(2 ** retry_count)
+    yield d
 
 
 @pytest.fixture(scope="session")

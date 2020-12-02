@@ -1,14 +1,15 @@
 from .database import Database
 
-db = Database()
+# db = Database()
 
-def test_get_procuts_from_empty_table():
+
+def test_get_procuts_from_empty_table(db: Database):
     db.truncate()
     ps = db.get_products()
     assert len(ps) == 0
 
 
-def test_insert_products():
+def test_insert_products(db: Database):
     db.truncate()
     id = db.insert_product(name="Käse", amount=5, required_amount=6)
     assert id != None
@@ -19,7 +20,7 @@ def test_insert_products():
     assert p.required_amount == 6
 
 
-def test_get_product_by_id():
+def test_get_product_by_id(db: Database):
     db.truncate()
     id = db.insert_product(name="Käse", amount=5, required_amount=6)
     id = db.insert_product(name="Käse2", amount=10, required_amount=9)
