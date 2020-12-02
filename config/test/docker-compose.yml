@@ -3,11 +3,12 @@ services:
 
   test_api:
     build:
-      context: ../api
+      context: ../..
+      dockerfile: config/api/Dockerfile
       args:
         SPECIAL_REQUIREMENTS: "test-requirements.txt"
 
-    entrypoint: ["pytest", "-v"]
+    entrypoint: ["pytest", "-v", "--disable-warnings"]
     container_name: hvz_test_api
     depends_on:
       - database

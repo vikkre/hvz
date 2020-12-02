@@ -9,6 +9,6 @@ RUN apk add --no-cache \
   postgresql-dev
 
 COPY ./frontend /frontend
-RUN pip3 install -r requirements.txt
+RUN pip3 install  --disable-pip-version-check -r requirements.txt
 
 CMD pytest -v | tee /frontend/pytest-results-$(date +%Y-%m-%d-%H-%M-%S).txt
