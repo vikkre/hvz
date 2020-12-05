@@ -9,17 +9,19 @@ then
 	echo "API test was successful."
 else
 	echo "API test failed."
+	popd
 	exit 1
 fi
 
-echo "Here be Frontend test"
-# docker-compose -f frontend.docker-compose.yml up --build --exit-code-from test_e2etests --abort-on-container-exit
+docker-compose -f ../../docker-compose.yml -f ../e2etests/docker-compose.yml up --build --exit-code-from e2etests --abort-on-container-exit
 if [ $? -eq 0 ];
 then
 	echo "Frontend test was successful."
 else
 	echo "Frontend test failed."
+	popd
 	exit 1
 fi
 
+echo "All tests ran successful"
 popd

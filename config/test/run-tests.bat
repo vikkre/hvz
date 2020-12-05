@@ -3,7 +3,7 @@
 pushd %~dp0
 :: api tests
 docker-compose  ^
-        -f .\docker-compose.yml ^
+        -f .\api.docker-compose.yml ^
         up --build --abort-on-container-exit --exit-code-from test_api
 set api_test_exit_code=%errorlevel%
 :: frontend tests
