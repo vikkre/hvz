@@ -14,6 +14,5 @@ ENV FLASK_RUN_HOST 0.0.0.0
 
 COPY ./config/api/app.ini /code
 COPY ./api /code
-RUN rm -rf /code/test
 
 CMD ["flask", "run"]

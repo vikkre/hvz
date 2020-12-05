@@ -1,9 +1,7 @@
 #!/bin/bash
 
-current_path=$(pwd)
-
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-cd "$parent_path"
+pushd "$parent_path"
 
 docker-compose -f api.docker-compose.yml up --build --exit-code-from test_api --abort-on-container-exit
 if [ $? -eq 0 ];
@@ -24,4 +22,4 @@ else
 	exit 1
 fi
 
-cd "$current_path"
+popd
