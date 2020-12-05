@@ -1,0 +1,38 @@
+version: "3"
+services:
+  database:
+    ports:
+      - 5432:5432
+    environment:
+      PGDATA: /tmp/testdata
+    logging:
+      driver: "none"
+
+  selenium:
+    image: selenium/standalone-firefox
+    container_name: selenium
+    depends_on:
+      - web
+    ports:
+      - 4444:4444
+    logging:
+      driver: "none"
+
+  api:
+    logging:
+      driver: "none"
+
+  web:
+    logging:
+      driver: "none"
+
+  e2etests:
+    build:
+      context: .
+      dockerfile: ./config/e2etests/Dockerfile
+    container_name: hvz_e2etests
+    environment:
+      DB_HOST: database
+      SELENIUM_HOST: selenium
+      WEB_HOST: hvz_web
+    depends_on: [database, api, web, selenium]

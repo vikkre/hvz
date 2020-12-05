@@ -3,6 +3,7 @@ __pycache__
 venv
 
 hvz-data
+hvz-data-test
 
 frontend/.cache
 frontend/dist

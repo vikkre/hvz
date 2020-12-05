@@ -8,8 +8,8 @@ services:
   database:
     ports:
       - 5432:5432
-    volumes:
-      - ./hvz-data-test/:/var/lib/postgresql/data/
+    environment: 
+      PGDATA: /tmp/testdata
 
   selenium:
     image: selenium/standalone-firefox

@@ -65,6 +65,4 @@ class Product(db.Model):
 
 @run_once
 def init():
-	# deprecated: /products
-	helper.RestBase("/products", Product, data_name="product")
-	helper.RestBase("/product", Product, data_name="product")
+	helper.RestBase("/product", Product)

@@ -18,7 +18,7 @@ export async function getMenu(id) {
   try {
     const ret = await fetch(`${api_root}/menu/${id}`);
     const json = await ret.json();
-    return json.menu;
+    return json.data; 
   } catch (error) {
     console.log(error);
     throw new Error("Could not load Menu.");
