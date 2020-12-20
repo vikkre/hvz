@@ -1,7 +1,7 @@
 <template>
     <section class="section pt-0 mb-4 has-background-light">
         <div class="control">
-            <a class="button" name="finish" @click="finish()"> Finish </a>
+            <a class="button" name="finish" @click="finish()" :disabled="!canFinish"> Finish </a>
         </div>
         <div class="columns is-xmobile header pt-2">
             <div class="column">Product</div>
@@ -88,17 +88,21 @@ export default {
         );
         this.neededProducts = ps;
     },
+    computed: {
+      canFinish : function() {
+        return (this.neededProducts.filter(p => p.inCart).length > 0) && this.$attrs.apiOnline
+      }
+    },
     methods: {
         finish: async function () {
-            console.log("Finish it");
             this.neededProducts
                 .filter((editedProduct) => editedProduct.inCart)
                 .forEach(async function (editedProduct) {
-                    console.log(editedProduct)
                     let dbProduct = await api.getProduct(editedProduct.id);
-                    dbProduct.amount = Number(dbProduct.amount) + Number(editedProduct.bought);
+                    dbProduct.amount =
+                        Number(dbProduct.amount) + Number(editedProduct.bought);
                     api.saveProduct(dbProduct);
-                    editedProduct.bought = 0
+                    editedProduct.bought = 0;
                 });
         },
     },

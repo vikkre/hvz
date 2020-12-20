@@ -3,7 +3,7 @@
     <MainNavigation></MainNavigation>
     <section class="hero">
       <transition name="component-fade" mode="out-in">
-        <router-view></router-view>
+        <router-view :apiOnline="apiOnline"></router-view>
       </transition>
       <div v-if="!apiOnline" style="text-align: center; background-color: red; font-size: 32px">API NOT REACHABLE!</div>
     </section>
@@ -15,7 +15,6 @@ import MainNavigation from "./components/MainNavigation.vue";
 
 function checkApiOnline(vm) {
   window.setTimeout(function() {
-    console.log(vm.apiOnline);
     fetch("/api")
       .then(result => {
         vm.apiOnline = result.ok;
@@ -40,7 +39,7 @@ export default {
     showInfo: function(text) {}
   },
   created: function() {
-    // checkApiOnline(this);
+    checkApiOnline(this);
   }
 };
 </script>
