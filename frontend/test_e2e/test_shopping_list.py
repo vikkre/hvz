@@ -1,10 +1,11 @@
-#TODO: Use db fixture!
-import pytest
+# TODO: Use db fixture!
 from .database import Database
+from .pages import ShoppingListPage
 
 
-def db_for_shopping_list():
-    db = Database()
+def db_for_shopping_list(db=None):
+    if db is None:
+        db = Database()
     db.truncate()
     db.insert_4_dummy_products_for_shopping_list()
 
@@ -48,6 +49,23 @@ def test_shopping_list_can_increase_number_bought(shopping_list_page):
     page.product_rows[1].parts.increase_bought.click()
     page.product_rows[1].parts.increase_bought.click()
     assert page.product_rows[1].parts.number_bought.value == "4"
+
+
+def test_shoppint_list_finishing_updates_products(shopping_list_page: ShoppingListPage, db: Database):
+    db_for_shopping_list(db)
+    old_products = db.get_products()
+    shopping_list_page.visit(reload=True)
+    products = []
+    for pr in shopping_list_page.product_rows:
+        products.append(pr.parts.product_name.value)
+        pr.parts.number_bought.fill("1")
+        pr.parts.check.click()
+    shopping_list_page.finish_button.click()
+    new_products = db.get_products()
+    for p in products:
+        new_product = next(filter(lambda product: product.name == p, new_products))
+        old_product = next(filter(lambda product: product.name == p, old_products))
+        assert new_product.amount == old_product.amount + 1
 
 
 def test_shopping_list_shows_number_required(shopping_list_page):
