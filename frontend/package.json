@@ -4,7 +4,7 @@
   "description": "Frontend for hvz",
   "main": "index.js",
   "scripts": {
-    "build": "parcel build ./web/index.html --no-minify",
+    "build": "set NODE_ENV=development && parcel build ./web/index.html --no-minify",
     "watch": "parcel watch ./web/index.html"
   },
   "keywords": [],

@@ -42,3 +42,7 @@ class ShoppingListPage(BasePage):
         for r in rows:
             r.parts = ProductRow(r)
         return rows
+
+    @property
+    def finish_button(self):
+        return self.browser.find_by_name("finish")
