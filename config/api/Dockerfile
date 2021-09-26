@@ -1,10 +1,9 @@
-FROM python:3.7-alpine
+FROM python:3.8.0
 
 WORKDIR /code
 
 ARG SPECIAL_REQUIREMENTS
 
-RUN apk add --no-cache gcc musl-dev linux-headers postgresql-dev
 COPY config/api/requirements/requirements.txt requirements.txt
 COPY config/api/requirements/${SPECIAL_REQUIREMENTS} special_requirements.txt
 RUN pip install -r requirements.txt -r special_requirements.txt
